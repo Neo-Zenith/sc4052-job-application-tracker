@@ -1,0 +1,20 @@
+.btn-primary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: var(--color-primary-500);
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-600);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+}

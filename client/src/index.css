@@ -1,0 +1,5 @@
+html, body {
+  font-size: 62.5%;
+  margin: 0;
+  background-color: var(--color-surface-100);
+}
