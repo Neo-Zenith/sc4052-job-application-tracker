@@ -4,6 +4,7 @@ import PastXDaysChart from "../sections/Charts/PastXDaysChart";
 import OverviewCards from "../sections/OverviewCards/OverviewCards";
 import Sidebar from "../sections/Sidebar/Sidebar";
 import "./Page.css";
+import PieChart from "../sections/Charts/PieChart";
 
 function MainPage() {
     const mainPageController = new MainPageController();
@@ -28,6 +29,26 @@ function MainPage() {
                     title={"Past 7 Days Applications Count"}
                     data={past7DaysData}
                     x={7}
+                />
+                <PieChart
+                    title={"Application by Status"}
+                    data={[
+                        {
+                            label: "Pending",
+                            value: 1200,
+                            color: "#ff8c00",
+                        },
+                        {
+                            label: "Approved",
+                            value: 15,
+                            color: "#a688fa",
+                        },
+                        {
+                            label: "Rejected",
+                            value: 5,
+                            color: "#ff0000",
+                        },
+                    ]}
                 />
             </div>
         </>

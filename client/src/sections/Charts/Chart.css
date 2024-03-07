@@ -14,6 +14,12 @@
 }
 
 .main-page-chart {
-    margin: 5rem auto;
+    margin: 5rem auto 0;
     width: 90%;
+}
+
+.app-status-chart {
+    width: 35%;
+    margin-right: auto;
+    margin-left: 5rem;
 }
