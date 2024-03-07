@@ -3,6 +3,7 @@ package com.example.applicationtrackerserver.controllers;
 import com.example.applicationtrackerserver.models.User;
 import com.example.applicationtrackerserver.services.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,11 @@ import java.util.Optional;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -43,8 +42,12 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(user);
-        return ResponseEntity.ok(updatedUser);
+        try {
+            User updatedUser = userService.updateUser(user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
