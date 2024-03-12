@@ -54,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         logger.info("Login request received for user: " + request.getUsername());
 
         try {
@@ -64,7 +64,7 @@ public class AuthController {
                 logger.info("User authenticated successfully: " + request.getUsername());
                 UserInfoDetails userInfoDetails = userInfoDetailsService.loadUserByUsername(request.getUsername());
                 String token = jwtTokenService.generateToken(userInfoDetails);
-                return ResponseEntity.ok(token);
+                return ResponseEntity.status(HttpStatus.OK).body("{\"token\": \"" + token + "\"}");
             }
             logger.info("User authentication failed: " + request.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");

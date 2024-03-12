@@ -24,16 +24,19 @@ public class Application {
     private String companyName;
 
     @Column(nullable = false)
-    private String jobTitle;
+    private String companyUrl;
 
     @Column(nullable = false)
+    private String jobTitle;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String jobDescription;
 
     @Column(nullable = false)
     private String source;
 
     @Column(nullable = false)
-    private String type;
+    private String jobType;
 
     @Column(nullable = true)
     private String remark;
@@ -63,7 +66,7 @@ public class Application {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", jobDescription='" + jobDescription + '\'' +
                 ", source='" + source + '\'' +
-                ", type='" + type + '\'' +
+                ", jobType='" + jobType + '\'' +
                 ", remark='" + remark + '\'' +
                 ", coverLetter='" + coverLetter + '\'' +
                 ", user=" + user +

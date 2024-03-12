@@ -50,7 +50,7 @@ public class ApplicationService {
             application.setJobTitle(updatedApplication.getJobTitle());
             application.setJobDescription(updatedApplication.getJobDescription());
             application.setSource(updatedApplication.getSource());
-            application.setType(updatedApplication.getType());
+            application.setJobType(updatedApplication.getJobType());
             application.setRemark(updatedApplication.getRemark());
             application.setCoverLetter(updatedApplication.getCoverLetter());
             application.setUser(updatedApplication.getUser());

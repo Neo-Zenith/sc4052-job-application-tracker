@@ -70,6 +70,7 @@ public class ApplicationController {
         application.setCreatedOn(LocalDateTime.now());
         application.setLastUpdated(LocalDateTime.now());
         logger.info("Filled in missing attributes!");
+
         Application newApplication = applicationService.createApplication(application);
         return ResponseEntity.ok(newApplication);
     }
