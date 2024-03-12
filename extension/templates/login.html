@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+		}
+
+		#loginForm {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+		}
+	</style>
+
+	<body>
+		<h1>Login</h1>
+		<form id="loginForm">
+			<div>
+				<label for="username">Username:</label><br />
+				<input type="text" id="username" name="username" /><br />
+			</div>
+			<div>
+				<label for="password">Password:</label><br />
+				<input type="password" id="password" name="password" /><br />
+			</div>
+			<input type="submit" value="Submit" />
+		</form>
+
+		<script src="../js/login.js"></script>
+	</body>
+</html>
