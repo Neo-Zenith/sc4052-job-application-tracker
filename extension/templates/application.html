@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.job-card {
+				max-height: 60%;
+				overflow-y: scroll;
+				padding: 1em;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+			}
+
+			.job-card h2 {
+				margin-bottom: 0.5em;
+			}
+
+			.job-card p {
+				margin-bottom: 0.5em;
+			}
+
+			.job-card .job-description {
+				max-height: 100px;
+				overflow-y: auto;
+			}
+
+			.job-update-form {
+				margin-top: 1em;
+				margin-bottom: 1em;
+			}
+
+			#actionBtns {
+				display: flex;
+				justify-content: space-evenly;
+				align-items: center;
+				margin-top: 10px;
+				gap: 10px;
+			}
+
+			#actionBtns button {
+				margin: 0;
+			}
+		</style>
+		<link rel="stylesheet" href="../css/index.css" />
+		<script defer src="../js/application.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Update Application</h1>
+
+			<div class="job-card" id="jobContainer"></div>
+
+			<form class="job-update-form" id="updateForm"></form>
+
+			<div id="actionBtns">
+				<button id="backBtn">Back</button>
+			</div>
+		</div>
+	</body>
+</html>
