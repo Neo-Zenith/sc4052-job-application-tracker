@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class ApplicationService {
@@ -24,13 +25,28 @@ public class ApplicationService {
         return applicationRepository.findAll();
     }
 
-    public List<Application> getApplicationsByUser(long userId) {
+    public List<Application> getApplicationsByUserId(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return applicationRepository.findByUser(user);
     }
 
     public Optional<Application> getApplicationById(Long id) {
         return applicationRepository.findById(id);
+    }
+
+    public List<Application> getApplicationsByStatus(String status) {
+        return applicationRepository.findByStatus(status);
+    }
+
+    public List<Application> getApplicationsByUserIdAndStatus(long userId, String status) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return applicationRepository.findByUserAndStatus(user, status);
+    }
+
+    public int getCountOfApplicationsLast7Days() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime sevenDaysAgo = currentDateTime.minusDays(7);
+        return applicationRepository.countByCreatedOnBetween(sevenDaysAgo, currentDateTime);
     }
 
     public Application createApplication(Application application) {

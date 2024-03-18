@@ -23,7 +23,7 @@ public class Application {
     @Column(nullable = false)
     private String companyName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String companyUrl;
 
     @Column(nullable = false)
@@ -41,7 +41,7 @@ public class Application {
     @Column(nullable = true)
     private String remark;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String coverLetter;
 
     @ManyToOne(cascade = CascadeType.MERGE)

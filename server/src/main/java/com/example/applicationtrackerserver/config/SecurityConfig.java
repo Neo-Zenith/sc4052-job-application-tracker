@@ -2,7 +2,6 @@ package com.example.applicationtrackerserver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.Arrays;
 import java.util.logging.Logger;

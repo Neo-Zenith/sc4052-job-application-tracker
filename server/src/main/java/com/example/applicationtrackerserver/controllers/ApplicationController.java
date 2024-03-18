@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -36,8 +38,24 @@ public class ApplicationController {
     private JwtTokenService jwtTokenService;
 
     @GetMapping
-    public List<Application> getAllApplications() {
+    public List<Application> getAllApplications(@RequestParam(value = "userId", required = false) Long userId,
+            @RequestParam(value = "status", required = false) String status) {
+        if (userId != null && status != null) {
+            return applicationService.getApplicationsByUserIdAndStatus(userId, status);
+        } else if (userId != null) {
+            return applicationService.getApplicationsByUserId(userId);
+        } else if (status != null) {
+            return applicationService.getApplicationsByStatus(status);
+        }
         return applicationService.getAllApplications();
+    }
+
+    @GetMapping("/count/last7days")
+    public ResponseEntity<?> getCountOfApplicationsLast7Days() {
+        int count = applicationService.getCountOfApplicationsLast7Days();
+        Map<String, Integer> response = new HashMap<String, Integer>();
+        response.put("count", count);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -88,8 +106,10 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteApplication(@PathVariable Long id) {
+    public ResponseEntity<?> deleteApplication(@PathVariable Long id) {
         applicationService.deleteApplication(id);
-        return ResponseEntity.ok("Application deleted successfully");
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("status", "User deleted successfully");
+        return ResponseEntity.ok(response);
     }
 }
