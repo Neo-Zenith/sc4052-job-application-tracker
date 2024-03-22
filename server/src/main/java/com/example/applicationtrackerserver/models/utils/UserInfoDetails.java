@@ -1,8 +1,10 @@
-package com.example.applicationtrackerserver.models;
+package com.example.applicationtrackerserver.models.utils;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.applicationtrackerserver.models.User;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package com.example.applicationtrackerserver.models;
+package com.example.applicationtrackerserver.models.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

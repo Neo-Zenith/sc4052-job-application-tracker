@@ -65,6 +65,27 @@
 			<artifactId>modelmapper</artifactId>
 			<version>0.7.4</version>
 		</dependency>
+		
+		<!-- Load env vars -->
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>java-dotenv</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+		
+		<!-- Parse JSON response -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
+		</dependency>
+		
+		<!-- PDFBox to parse PDFs -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.24</version>
+		</dependency>
 	</dependencies>
 
 	<build>

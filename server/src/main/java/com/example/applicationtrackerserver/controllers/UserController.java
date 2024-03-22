@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         Map<String, String> response = new HashMap<String, String>();
         response.put("status", "User deleted successfully");

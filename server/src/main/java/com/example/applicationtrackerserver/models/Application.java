@@ -61,14 +61,10 @@ public class Application {
     public String toString() {
         return "Application{" +
                 "id=" + id +
-                ", applicationUrl='" + applicationUrl + '\'' +
-                ", companyName='" + companyName + '\'' +
                 ", jobTitle='" + jobTitle + '\'' +
-                ", jobDescription='" + jobDescription + '\'' +
+                ", companyName='" + companyName + '\'' +
                 ", source='" + source + '\'' +
                 ", jobType='" + jobType + '\'' +
-                ", remark='" + remark + '\'' +
-                ", coverLetter='" + coverLetter + '\'' +
                 ", user=" + user +
                 ", status='" + status + '\'' +
                 ", createdOn=" + createdOn +

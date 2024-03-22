@@ -7,7 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.example.applicationtrackerserver.models.UserInfoDetails;
+import com.example.applicationtrackerserver.models.utils.UserInfoDetails;
 
 import java.util.Date;
 import java.util.function.Function;

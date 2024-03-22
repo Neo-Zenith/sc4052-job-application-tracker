@@ -1,9 +1,9 @@
 package com.example.applicationtrackerserver.controllers;
 
 import com.example.applicationtrackerserver.exceptions.AuthExceptions;
-import com.example.applicationtrackerserver.models.AuthRequest;
 import com.example.applicationtrackerserver.models.User;
-import com.example.applicationtrackerserver.models.UserInfoDetails;
+import com.example.applicationtrackerserver.models.utils.AuthRequest;
+import com.example.applicationtrackerserver.models.utils.UserInfoDetails;
 import com.example.applicationtrackerserver.services.AuthService;
 import com.example.applicationtrackerserver.services.JwtTokenService;
 import com.example.applicationtrackerserver.services.UserInfoDetailsService;
@@ -42,25 +42,25 @@ public class AuthController {
     private UserInfoDetailsService userInfoDetailsService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map> signUp(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> signUp(@RequestBody User user) {
         Map<String, String> response = new HashMap<String, String>();
         try {
             authService.signUp(user);
-            response.put("status", "User registered successfully");
+            response.put("message", "User registered successfully");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (AuthExceptions.UsernameExistsException | AuthExceptions.EmailExistsException e) {
-            response.put("status", e.getMessage());
+            response.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(response);
         } catch (Exception e) {
-            response.put("status", "Error occurred during user registration: " + e.getMessage());
+            response.put("message", "Error occurred during user registration: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(response);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
         logger.info("Login request received for user: " + request.getUsername());
         Map<String, String> response = new HashMap<String, String>();
 
@@ -72,29 +72,29 @@ public class AuthController {
                 UserInfoDetails userInfoDetails = userInfoDetailsService.loadUserByUsername(request.getUsername());
                 String token = jwtTokenService.generateToken(userInfoDetails);
                 response.put("token", token);
-                response.put("status", "User authenticated successfully");
+                response.put("message", "User authenticated successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
-            logger.info("User authentication failed: " + request.getUsername());
 
+            logger.info("User authentication failed: " + request.getUsername());
             response.put("token", null);
-            response.put("status", "Invalid credentials");
+            response.put("message", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         } catch (AuthenticationException e) {
             logger.warning("User authentication failed: " + request.getUsername() + " - " + e.getMessage());
             response.put("token", null);
-            response.put("status", "Invalid credentials");
+            response.put("message", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map> logout(HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
         // Clear the authentication token
         SecurityContextHolder.clearContext();
         Map<String, String> response = new HashMap<String, String>();
-        response.put("status", "Logged out successfully");
+        response.put("message", "Logged out successfully");
         return ResponseEntity.ok(response);
     }
 }
