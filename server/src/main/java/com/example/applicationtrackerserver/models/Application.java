@@ -57,6 +57,21 @@ public class Application {
     @Column(nullable = false)
     private LocalDateTime lastUpdated;
 
+    public Application(String applicationUrl, String companyName, String companyUrl, String jobTitle,
+            String jobDescription, String source, String jobType, String remark, String coverLetter,
+            String status) {
+        this.applicationUrl = applicationUrl;
+        this.companyName = companyName;
+        this.companyUrl = companyUrl;
+        this.jobTitle = jobTitle;
+        this.jobDescription = jobDescription;
+        this.source = source;
+        this.jobType = jobType;
+        this.remark = remark;
+        this.coverLetter = coverLetter;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Application{" +

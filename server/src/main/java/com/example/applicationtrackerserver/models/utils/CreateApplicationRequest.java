@@ -21,17 +21,8 @@ public class CreateApplicationRequest {
 
     @Override
     public String toString() {
-        return "CreateApplicationRequest{" +
-                "applicationUrl='" + applicationUrl + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", companyUrl='" + companyUrl + '\'' +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", jobDescription='" + jobDescription + '\'' +
-                ", jobType='" + jobType + '\'' +
-                ", source='" + source + '\'' +
-                ", remark='" + remark + '\'' +
-                ", coverLetter='" + coverLetter + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        return String.format(
+                "CreateApplicationRequest[companyName='%s', companyUrl='%s', jobTitle='%s', jobType='%s', source='%s', status='%s']",
+                companyName, companyUrl, jobTitle, jobType, source, status);
     }
 }

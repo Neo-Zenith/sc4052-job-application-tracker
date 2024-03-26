@@ -1,0 +1,1 @@
+ssh -i "SC4052CloudComputing_key.pem" sc4052-admin@172.171.242.107

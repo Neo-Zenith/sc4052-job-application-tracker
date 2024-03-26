@@ -19,12 +19,24 @@ public class GeminiService {
     public String tailorResume(String resume, Long jobApplicationId) throws RuntimeException {
         // Fetch the job application from the database
         Application jobApplication = applicationRepository.findById(jobApplicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Job application not found"));
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
 
         // Make a request to Gemini to tailor the resume
         try {
-            String result = geminiClient.tailorResume(resume, jobApplication.getJobDescription());
-            return result;
+            return geminiClient.tailorResume(resume, jobApplication.getJobDescription());
+        } catch (Exception e) {
+            throw new RuntimeException("Error tailoring resume: " + e.getMessage());
+        }
+    }
+
+    public String generateCoverLetter(Long jobApplicationId) {
+        // Fetch the job application from the database
+        Application jobApplication = applicationRepository.findById(jobApplicationId)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+
+        // Make a request to Gemini to craft the cover letter
+        try {
+            return geminiClient.generateCoverLetter(jobApplication.getJobDescription());
         } catch (Exception e) {
             throw new RuntimeException("Error tailoring resume: " + e.getMessage());
         }

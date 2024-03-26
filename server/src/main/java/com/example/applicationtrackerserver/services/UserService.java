@@ -1,17 +1,19 @@
 package com.example.applicationtrackerserver.services;
 
+import com.example.applicationtrackerserver.exceptions.UserExceptions;
 import com.example.applicationtrackerserver.models.User;
 import com.example.applicationtrackerserver.repository.UserRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
 public class UserService {
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -36,16 +38,17 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User updateUser(User updatedUser) throws RuntimeException {
+    public User updateUser(User updatedUser) throws UserExceptions.UserNotFoundException {
         Optional<User> existingUser = userRepository.findById(updatedUser.getId());
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setUsername(user.getUsername());
-            user.setEmail(user.getEmail());
-            user.setPassword(user.getPassword());
-            return userRepository.save(user);
+        if (!existingUser.isPresent()) {
+            throw new UserExceptions.UserNotFoundException("User not found");
         }
-        throw new RuntimeException("User not found");
+
+        User user = existingUser.get();
+        user.setUsername(user.getUsername());
+        user.setEmail(user.getEmail());
+        user.setPassword(user.getPassword());
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {

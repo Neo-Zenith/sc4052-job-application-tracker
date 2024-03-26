@@ -34,10 +34,10 @@ public class AuthService {
 
     public boolean authenticate(User user) {
         // Find the user in the database
-        Optional<User> optionalUser = userService.findByUsername(user.getUsername());
+        Optional<User> fetchedUser = userService.findByUsername(user.getUsername());
 
         // Check if the user exists and the password is correct
-        return optionalUser.isPresent()
-                && passwordEncoder.matches(user.getPassword(), optionalUser.get().getPassword());
+        return fetchedUser.isPresent()
+                && passwordEncoder.matches(user.getPassword(), fetchedUser.get().getPassword());
     }
 }

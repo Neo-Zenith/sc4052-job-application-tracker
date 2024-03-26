@@ -12,8 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private static final Logger logger = Logger.getLogger(AuthController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private AuthService authService;
@@ -42,7 +43,7 @@ public class AuthController {
     private UserInfoDetailsService userInfoDetailsService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> signUp(@RequestBody User user) {
+    public ResponseEntity<Object> signUp(@RequestBody User user) {
         Map<String, String> response = new HashMap<String, String>();
         try {
             authService.signUp(user);
@@ -53,16 +54,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(response);
         } catch (Exception e) {
-            response.put("message", "Error occurred during user registration: " + e.getMessage());
+            response.put("message", "Error occurred during user registration - " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(response);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<Object> login(@RequestBody AuthRequest request) {
         logger.info("Login request received for user: " + request.getUsername());
-        Map<String, String> response = new HashMap<String, String>();
+        Map<String, Object> response = new HashMap<String, Object>();
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -81,19 +82,19 @@ public class AuthController {
             response.put("message", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         } catch (AuthenticationException e) {
-            logger.warning("User authentication failed: " + request.getUsername() + " - " + e.getMessage());
+            logger.warn("User authentication failed: " + request.getUsername() + " - " + e.getMessage());
             response.put("token", null);
             response.put("message", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
         // Clear the authentication token
         SecurityContextHolder.clearContext();
-        Map<String, String> response = new HashMap<String, String>();
+
+        Map<String, Object> response = new HashMap<String, Object>();
         response.put("message", "Logged out successfully");
         return ResponseEntity.ok(response);
     }

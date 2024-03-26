@@ -2,7 +2,10 @@ package com.example.applicationtrackerserver.controllers;
 
 import com.example.applicationtrackerserver.models.User;
 import com.example.applicationtrackerserver.services.UserService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -24,6 +28,7 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
+        logger.info("Getting all users");
         return userService.getAllUsers();
     }
 

@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,10 @@ import com.example.applicationtrackerserver.models.utils.UserInfoDetails;
 
 import java.util.Date;
 import java.util.function.Function;
-import java.util.logging.Logger;
 
 @Service
 public class JwtTokenService {
-    private static final Logger logger = Logger.getLogger(JwtTokenService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
     private static final String SECRET = "SC4052_CLOUD_COMPUTING";
     private static final long EXPIRATION_TIME = 864_000_000; // 10 days

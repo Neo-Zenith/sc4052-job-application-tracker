@@ -59,22 +59,23 @@ public class ApplicationService {
 
     public Application updateApplication(Application updatedApplication) throws RuntimeException {
         Optional<Application> existingApplication = applicationRepository.findById(updatedApplication.getId());
-        if (existingApplication.isPresent()) {
-            Application application = existingApplication.get();
-            application.setApplicationUrl(updatedApplication.getApplicationUrl());
-            application.setCompanyName(updatedApplication.getCompanyName());
-            application.setJobTitle(updatedApplication.getJobTitle());
-            application.setJobDescription(updatedApplication.getJobDescription());
-            application.setSource(updatedApplication.getSource());
-            application.setJobType(updatedApplication.getJobType());
-            application.setRemark(updatedApplication.getRemark());
-            application.setCoverLetter(updatedApplication.getCoverLetter());
-            application.setUser(updatedApplication.getUser());
-            application.setStatus(updatedApplication.getStatus());
-            application.setCreatedOn(updatedApplication.getCreatedOn());
-            application.setLastUpdated(updatedApplication.getLastUpdated());
-            return applicationRepository.save(application);
+        if (!existingApplication.isPresent()) {
+            throw new RuntimeException("Application not found");
         }
-        throw new RuntimeException("Application not found");
+
+        Application application = existingApplication.get();
+        application.setApplicationUrl(updatedApplication.getApplicationUrl());
+        application.setCompanyName(updatedApplication.getCompanyName());
+        application.setJobTitle(updatedApplication.getJobTitle());
+        application.setJobDescription(updatedApplication.getJobDescription());
+        application.setSource(updatedApplication.getSource());
+        application.setJobType(updatedApplication.getJobType());
+        application.setRemark(updatedApplication.getRemark());
+        application.setCoverLetter(updatedApplication.getCoverLetter());
+        application.setUser(updatedApplication.getUser());
+        application.setStatus(updatedApplication.getStatus());
+        application.setCreatedOn(updatedApplication.getCreatedOn());
+        application.setLastUpdated(updatedApplication.getLastUpdated());
+        return applicationRepository.save(application);
     }
 }

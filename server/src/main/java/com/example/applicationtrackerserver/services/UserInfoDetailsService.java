@@ -1,8 +1,9 @@
 package com.example.applicationtrackerserver.services;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,7 @@ import com.example.applicationtrackerserver.repository.UserRepository;
 
 @Service
 public class UserInfoDetailsService implements UserDetailsService {
-    private static final Logger logger = Logger.getLogger(UserInfoDetailsService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoDetailsService.class);
 
     @Autowired
     private UserRepository userRepository;

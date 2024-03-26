@@ -10,8 +10,8 @@ import com.example.applicationtrackerserver.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,15 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("api/v1/applications")
 public class ApplicationController {
-    private static final Logger logger = Logger.getLogger(ApplicationController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     @Autowired
     private ApplicationService applicationService;
@@ -52,11 +53,11 @@ public class ApplicationController {
         return applicationService.getAllApplications();
     }
 
-    @GetMapping(value = "/count/last7days", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Integer>> getCountOfApplicationsLast7Days() {
+    @GetMapping(value = "/count/last7days")
+    public ResponseEntity<Object> getCountOfApplicationsLast7Days() {
         int count = applicationService.getCountOfApplicationsLast7Days();
-        Map<String, Integer> response = new HashMap<String, Integer>();
-        response.put("count", count);
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("result", count);
         return ResponseEntity.ok(response);
     }
 
@@ -68,7 +69,9 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createApplication(@RequestBody CreateApplicationRequest request) {
+    public ResponseEntity<Object> createApplication(@RequestBody Application request) {
+        Map<String, Object> response = new HashMap<String, Object>();
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = (String) authentication.getCredentials();
         logger.info("Token extracted from authentication: " + token);
@@ -78,7 +81,6 @@ public class ApplicationController {
 
         Optional<User> user = userService.getUserById(userId);
         if (user.isEmpty()) {
-            Map<String, String> response = new HashMap<String, String>();
             response.put("message", "Error occured - Unable to fetch user");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -94,7 +96,9 @@ public class ApplicationController {
         logger.info("Filled in missing attributes!");
 
         Application newApplication = applicationService.createApplication(application);
-        return ResponseEntity.ok(newApplication);
+        response.put("message", "Application created successfully.");
+        response.put("application", newApplication);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
@@ -110,9 +114,9 @@ public class ApplicationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteApplication(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteApplication(@PathVariable Long id) {
         applicationService.deleteApplication(id);
-        Map<String, String> response = new HashMap<String, String>();
+        Map<String, Object> response = new HashMap<String, Object>();
         response.put("message", "User deleted successfully");
         return ResponseEntity.ok(response);
     }

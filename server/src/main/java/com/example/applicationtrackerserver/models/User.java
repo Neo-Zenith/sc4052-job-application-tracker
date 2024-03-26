@@ -26,4 +26,10 @@ public class User {
 
     @Column(nullable = false)
     private String roles;
+
+    public User(String username, String email, String password, String roles) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }
