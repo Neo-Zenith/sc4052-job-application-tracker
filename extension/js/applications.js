@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 	getToken()
 		.then((token) => {
-			return fetch("http://localhost:8080/api/v1/applications", {
+			const payload = JSON.parse(atob(token.split(".")[1]));
+			console.log("payload:", payload);
+
+			return fetch("http://172.171.242.107:8080/api/v1/applications", {
+				params: { userId: payload.userId },
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},

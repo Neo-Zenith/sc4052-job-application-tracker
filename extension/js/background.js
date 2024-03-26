@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		console.log("[Extension] Saving job...");
 		getToken()
 			.then((token) => {
-				fetch("http://localhost:8080/api/v1/auth/login", {
+				fetch("http://172.171.242.107:8080/api/v1/applications", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -12,8 +12,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 					body: JSON.stringify(request.payload),
 				})
 					.then((response) => response.json())
-					.then((data) => sendResponse({ success: true }))
-					.catch((error) => sendResponse({ success: false }));
+					.then((data) => {
+						console.log(data);
+						sendResponse({ success: true });
+					})
+					.catch((error) => {
+						throw error;
+					});
 			})
 			.catch((error) => {
 				console.log(error);

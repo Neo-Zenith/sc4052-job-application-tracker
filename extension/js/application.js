@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Get the data parameter
 	let base64Data = params.get("data");
 
+	// Decode the data
 	let decodedData = base64Decode(base64Data);
 
 	// Convert the JSON string to an object
@@ -173,7 +174,7 @@ function createForm(application) {
 		getToken()
 			.then((token) => {
 				return fetch(
-					`http://localhost:8080/api/v1/applications/${application.id}`,
+					`http://172.171.242.107:8080/api/v1/applications/${application.id}`,
 					{
 						method: "PUT",
 						headers: {

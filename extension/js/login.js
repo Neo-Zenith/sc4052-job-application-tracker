@@ -9,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 	statusMessage.textContent = "Making request to login..."; // Set the initial status message
 	document.getElementById("loginForm").appendChild(statusMessage); // Append the status message element to the login form
 
-	fetch("http://localhost:8080/api/v1/auth/login", {
+	fetch("http://172.171.242.107:8080/api/v1/auth/login", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
