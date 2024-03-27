@@ -6,6 +6,7 @@ import Sidebar from "../sections/Sidebar/Sidebar";
 import "./Page.css";
 import PieChart from "../sections/Charts/PieChart";
 import { useDispatch, useSelector } from "react-redux";
+import RecentAppTable from "../sections/Tables/RecentAppTable";
 
 function MainPage() {
     const dispatch = useDispatch();
@@ -39,26 +40,36 @@ function MainPage() {
                     data={past7DaysData}
                     x={7}
                 />
-                <PieChart
-                    title={"Application by Status"}
-                    data={[
-                        {
-                            label: "Pending",
-                            value: 1200,
-                            color: "#ff8c00",
-                        },
-                        {
-                            label: "Approved",
-                            value: 15,
-                            color: "#a688fa",
-                        },
-                        {
-                            label: "Rejected",
-                            value: 5,
-                            color: "#ff0000",
-                        },
-                    ]}
-                />
+                <div
+                    style={{
+                        display: "flex",
+                        width: "92.5%",
+                        margin: "auto",
+                        marginBottom: "5rem",
+                    }}
+                >
+                    <PieChart
+                        title={"Application by Status"}
+                        data={[
+                            {
+                                label: "Pending",
+                                value: 1200,
+                                color: "#ff8c00",
+                            },
+                            {
+                                label: "Approved",
+                                value: 15,
+                                color: "#a688fa",
+                            },
+                            {
+                                label: "Rejected",
+                                value: 5,
+                                color: "#ff0000",
+                            },
+                        ]}
+                    />
+                    <RecentAppTable />
+                </div>
             </div>
         </>
     );

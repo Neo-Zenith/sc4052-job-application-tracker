@@ -29,3 +29,11 @@
 .auth-content {
     flex: 0.5;
 }
+
+.applications-table-title {
+    font: 500 2rem 'Inter';
+    color: white;
+    padding-bottom: 2rem;
+    margin-left: -2rem;
+    margin-top: -1rem;
+}

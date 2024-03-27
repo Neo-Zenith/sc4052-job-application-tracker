@@ -26,7 +26,7 @@ function Sidebar() {
                 </a>
                 <div className="sidebar__section">
                     <span className="sidebar__section__header">Statistics</span>
-                    <a className="sidebar__link" href="/">
+                    <a className="sidebar__link" href="/applications">
                         <WorkIcon />
                         View Job Applications
                     </a>

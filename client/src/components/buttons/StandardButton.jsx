@@ -1,8 +1,11 @@
 import "./Button.css";
 
-function StandardButton({ onClick, display }) {
+function StandardButton({ onClick, display, isTransparentBg }) {
     return (
-        <button className="btn-primary" onClick={onClick}>
+        <button
+            className={isTransparentBg ? " btn-transparent" : "btn-primary"}
+            onClick={onClick}
+        >
             {display}
         </button>
     );
