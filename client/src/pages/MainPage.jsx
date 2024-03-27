@@ -5,10 +5,12 @@ import OverviewCards from "../sections/OverviewCards/OverviewCards";
 import Sidebar from "../sections/Sidebar/Sidebar";
 import "./Page.css";
 import PieChart from "../sections/Charts/PieChart";
+import { useDispatch } from "react-redux";
 
 function MainPage() {
-    const mainPageController = new MainPageController();
+    const dispatch = useDispatch();
     const [past7DaysData, setPast7DaysData] = useState([]);
+    const mainPageController = new MainPageController(dispatch);
 
     useEffect(() => {
         setPast7DaysData(() => [

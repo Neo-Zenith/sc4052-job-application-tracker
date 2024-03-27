@@ -1,4 +1,8 @@
 class MainPageController {
+    constructor(dispatch) {
+        this.dispatch = dispatch;
+    }
+
     getPast7DaysApplicationsCount = () => {
         // fetch logic
 
