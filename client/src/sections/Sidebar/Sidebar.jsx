@@ -3,8 +3,17 @@ import WorkIcon from "@mui/icons-material/Work";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import BadgeIcon from "@mui/icons-material/Badge";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { useDispatch } from "react-redux";
+import AuthPageController from "../../controller/AuthPageController";
 
 function Sidebar() {
+    const dispatch = useDispatch();
+    const authPageController = new AuthPageController(dispatch);
+
+    const handleLogout = () => {
+        authPageController.logout();
+    };
+
     return (
         <div className="sidebar">
             <div className="sidebar__title">
@@ -33,6 +42,9 @@ function Sidebar() {
                         Update Status
                     </a>
                 </div>
+            </div>
+            <div>
+                <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
     );

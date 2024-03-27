@@ -1,4 +1,5 @@
 import { setAccessToken } from "../store/actions";
+import toast from "react-hot-toast";
 
 class AuthPageController {
     constructor(dispatch) {
@@ -38,12 +39,22 @@ class AuthPageController {
             const response = await fetch(url, options);
             const data = await response.json();
             if (response.status === 200) {
-                this.dispatch(setAccessToken(data.token));
+                toast.success("Login successful!");
+                setTimeout(() => {
+                    this.dispatch(setAccessToken(data.token));
+                }, 1000);
             }
             return data;
         } catch (error) {
             console.error("SignupPageController.signup: ", error);
         }
+    };
+
+    logout = () => {
+        toast.success("Logout successful!");
+        setTimeout(() => {
+            this.dispatch(setAccessToken(""));
+        }, 1000);
     };
 }
 

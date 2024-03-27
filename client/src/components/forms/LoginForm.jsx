@@ -8,8 +8,7 @@ function LoginForm({ onSubmit }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateInputs()) return;
-        const data = onSubmit({ username, password });
-        console.log(data);
+        onSubmit({ username, password });
     };
 
     const handleLabelState = (e) => {

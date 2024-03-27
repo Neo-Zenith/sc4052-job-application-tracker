@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
 import SignupPage from "./pages/SignupPage";
@@ -13,6 +14,16 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                 </Routes>
             </Router>
+            <Toaster
+                toastOptions={{
+                    className: "",
+                    style: {
+                        border: "1px solid #713200",
+                        padding: "1rem",
+                        font: "400 1.2rem Inter",
+                    },
+                }}
+            />
         </>
     );
 }

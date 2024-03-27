@@ -5,12 +5,19 @@ import OverviewCards from "../sections/OverviewCards/OverviewCards";
 import Sidebar from "../sections/Sidebar/Sidebar";
 import "./Page.css";
 import PieChart from "../sections/Charts/PieChart";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function MainPage() {
     const dispatch = useDispatch();
+    const accessToken = useSelector((state) => state.accessToken);
     const [past7DaysData, setPast7DaysData] = useState([]);
     const mainPageController = new MainPageController(dispatch);
+
+    useEffect(() => {
+        if (accessToken === "") {
+            window.location.href = "/login";
+        }
+    }, [accessToken]);
 
     useEffect(() => {
         setPast7DaysData(() => [
