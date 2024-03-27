@@ -1,0 +1,134 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface-200);
+    width: 100%;
+    height: fit-content;
+    box-sizing: border-box;
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.form-title {
+    font: 500 3rem 'Inter', sans-serif;
+    color: white;
+    text-align: center;
+}
+
+.form-subtitle {
+    font: 400 1.4rem 'Inter', sans-serif;
+    color: #c1bfbf;
+}
+
+.form-subtitle > a {
+    color: var(--color-primary-600);
+    text-decoration: none;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-content > form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 3rem;
+    width: 100%;
+}
+
+.form-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    column-gap: 2rem;
+    justify-content: center;
+}
+
+.form-group > label {
+    position: absolute;
+    z-index: 1;
+    font: 400 1.4rem 'Inter', sans-serif;
+    margin-left: 1.2rem;
+    color: #c1bfbf;
+    transition: all 0.3s ease;
+}
+
+.form-group > input {
+    display: flex;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    border: 0.1rem solid #c1bfbf;
+    border-radius: 0.5rem;
+    padding: 1rem 1.2rem;
+    color: var(--color-primary-600);
+    font: 400 1.4rem 'Inter', sans-serif;
+}
+
+.form-group > input:focus,
+.form-group > input.active {
+    outline: none;
+    border-color: var(--color-primary-600);
+    transition: border-color 0.3s ease;
+}
+
+.form-group > label.active,
+.form-group > input:focus + label {
+    color: var(--color-primary-600);
+    z-index: 3;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--color-surface-200);
+    padding: 0.5rem;
+    transform: translate(-0.5rem, -2rem);
+}
+
+.form-group > label.error {
+    color: red !important;
+    transition: all 0.3s ease;
+}
+
+.form-group > input.error {
+    border-color: red !important;
+    transition: border-color 0.3s ease;
+    color: red;
+}
+
+.password-error-text {
+    font: 400 1.2rem 'Inter', sans-serif;
+    color: red;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.form-group > label.error + .password-error-text {
+    display: block;
+}
+
+.form-group > input.error + #confirm-password-label {
+    color: var(--color-primary-600);
+    z-index: 3;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--color-surface-200);
+    padding: 0.5rem;
+    transform: translate(-0.5rem, -3rem);
+}
+
+.form-btn-label {
+    font: 400 1.4rem 'Inter', sans-serif;
+    color: var(--color-surface-100);
+}
