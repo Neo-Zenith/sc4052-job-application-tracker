@@ -1,7 +1,36 @@
+import { useState } from "react";
 import StandardTable from "../components/tables/StandardTable";
+import ApplicationPageController from "../controller/ApplicationPageController";
 import Sidebar from "../sections/Sidebar/Sidebar";
 
 function ApplicationsPage() {
+    const [data, setData] = useState([
+        {
+            id: 1,
+            timestamp: "2021-09-01 12:00",
+            jobTitle: "Software Engineer",
+            companyName: "Google",
+            status: "Pending",
+        },
+        {
+            id: 2,
+            timestamp: "2021-09-02 12:00",
+            jobTitle: "Software Engineer",
+            companyName: "Google",
+            status: "Approved",
+        },
+        {
+            id: 3,
+            timestamp: "2021-09-03 12:00",
+            jobTitle: "Software Engineer",
+            companyName: "Google",
+            status: "Rejected",
+        },
+    ]);
+    const [displayedData, setDisplayedData] = useState(data);
+
+    const applicationPageController = new ApplicationPageController();
+
     return (
         <>
             <Sidebar />
@@ -15,6 +44,20 @@ function ApplicationsPage() {
                     }}
                 >
                     <StandardTable
+                        onFilter={(filterOptions) => {
+                            setDisplayedData(
+                                applicationPageController.filter(
+                                    filterOptions,
+                                    data
+                                )
+                            );
+                        }}
+                        onResetFilter={() => {
+                            setDisplayedData(data);
+                            return {
+                                status: "All",
+                            };
+                        }}
                         sortable={true}
                         showPagination={true}
                         tableWidth={800}
@@ -70,29 +113,7 @@ function ApplicationsPage() {
                                 label: "Status",
                             },
                         ]}
-                        data={[
-                            {
-                                id: 1,
-                                timestamp: "2021-09-01 12:00",
-                                jobTitle: "Software Engineer",
-                                companyName: "Google",
-                                status: "Pending",
-                            },
-                            {
-                                id: 2,
-                                timestamp: "2021-09-02 12:00",
-                                jobTitle: "Software Engineer",
-                                companyName: "Google",
-                                status: "Approved",
-                            },
-                            {
-                                id: 3,
-                                timestamp: "2021-09-03 12:00",
-                                jobTitle: "Software Engineer",
-                                companyName: "Google",
-                                status: "Rejected",
-                            },
-                        ]}
+                        data={displayedData}
                     />
                 </div>
             </div>

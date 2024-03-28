@@ -53,6 +53,8 @@ function StandardTable({
     defaultOrderBy,
     defaultOrder,
     filters,
+    onFilter,
+    onResetFilter,
 }) {
     const [order, setOrder] = React.useState(defaultOrder);
     const [orderBy, setOrderBy] = React.useState(defaultOrderBy);
@@ -84,7 +86,7 @@ function StandardTable({
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
             ),
-        [order, orderBy, page, rowsPerPage]
+        [data, order, orderBy, page, rowsPerPage]
     );
 
     return (
@@ -103,6 +105,8 @@ function StandardTable({
                     tableTitle={tableTitle}
                     showFilters={showFilters}
                     filters={filters}
+                    onFilter={onFilter}
+                    onResetFilter={onResetFilter}
                 />
                 <TableContainer>
                     <Table

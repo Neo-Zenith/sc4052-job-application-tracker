@@ -1,14 +1,30 @@
 import { IconButton, Toolbar, Tooltip } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
+import React, { useState } from "react";
 import StandardButton from "../buttons/StandardButton";
 
-function TableToolbar({ tableTitle, showFilters, filters }) {
-    const [displayFilters, setDisplayFilters] = React.useState(false);
+function TableToolbar({
+    tableTitle,
+    showFilters,
+    filters,
+    onFilter,
+    onResetFilter,
+}) {
+    const [displayFilters, setDisplayFilters] = useState(false);
+    const [filterOptions, setFilterOptions] = useState({});
 
     const handleFilterClick = () => {
         setDisplayFilters(!displayFilters);
+    };
+
+    const handleApplyFilter = () => {
+        onFilter(filterOptions);
+    };
+
+    const resetFilter = () => {
+        const defaultOptions = onResetFilter();
+        setFilterOptions(defaultOptions);
     };
 
     return (
@@ -65,6 +81,7 @@ function TableToolbar({ tableTitle, showFilters, filters }) {
                                             alignItems: "center",
                                             columnGap: "1.5rem",
                                         }}
+                                        key={filter.id}
                                     >
                                         <span
                                             style={{
@@ -75,7 +92,6 @@ function TableToolbar({ tableTitle, showFilters, filters }) {
                                             {filter.label}
                                         </span>
                                         <select
-                                            key={filter.id}
                                             style={{
                                                 cursor: "pointer",
                                                 backgroundColor: "transparent",
@@ -86,6 +102,13 @@ function TableToolbar({ tableTitle, showFilters, filters }) {
                                                 padding: "1rem 1.5rem",
                                             }}
                                             defaultValue={filter.defaultOption}
+                                            value={filterOptions[filter.id]}
+                                            onChange={(e) => {
+                                                setFilterOptions({
+                                                    ...filterOptions,
+                                                    [filter.id]: e.target.value,
+                                                });
+                                            }}
                                         >
                                             {filter.options.map((option) => (
                                                 <option
@@ -114,6 +137,7 @@ function TableToolbar({ tableTitle, showFilters, filters }) {
                                 </span>
                             }
                             isTransparentBg={false}
+                            onClick={handleApplyFilter}
                         />
                         <StandardButton
                             display={
@@ -122,6 +146,7 @@ function TableToolbar({ tableTitle, showFilters, filters }) {
                                 </span>
                             }
                             isTransparentBg={true}
+                            onClick={resetFilter}
                         />
                     </div>
                 </div>
