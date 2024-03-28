@@ -14,8 +14,8 @@ function OverviewCards() {
                     icon={<ArticleIcon />}
                 />
                 <StandardCard
-                    title={"Number of Employers"}
-                    subtitle={"2"}
+                    title={"Latest Resume Score"}
+                    subtitle={"98%"}
                     icon={<ApartmentIcon />}
                 />
                 <StandardCard

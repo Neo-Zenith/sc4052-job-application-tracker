@@ -5,6 +5,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useDispatch } from "react-redux";
 import AuthPageController from "../../controller/AuthPageController";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import StandardButton from "../../components/buttons/StandardButton";
 
 function Sidebar() {
     const dispatch = useDispatch();
@@ -25,26 +28,42 @@ function Sidebar() {
                     Home
                 </a>
                 <div className="sidebar__section">
-                    <span className="sidebar__section__header">Statistics</span>
+                    <span className="sidebar__section__header">History</span>
                     <a className="sidebar__link" href="/applications">
                         <WorkIcon />
                         View Job Applications
-                    </a>
-                    <a className="sidebar__link" href="/">
-                        <BadgeIcon />
-                        View Employers
                     </a>
                 </div>
                 <div className="sidebar__section">
                     <span className="sidebar__section__header">Actions</span>
                     <a className="sidebar__link" href="/">
                         <AutorenewIcon />
-                        Update Status
+                        Update Application Status
+                    </a>
+                    <a className="sidebar__link" href="/">
+                        <DocumentScannerIcon />
+                        Check Resume Score
                     </a>
                 </div>
             </div>
-            <div>
-                <button onClick={handleLogout}>Logout</button>
+            <div className="sidebar__actions">
+                <StandardButton
+                    display={
+                        <span
+                            style={{
+                                display: "flex",
+                                columnGap: "1rem",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <LogoutIcon />
+                            Logout
+                        </span>
+                    }
+                    onClick={handleLogout}
+                    isTransparentBg={true}
+                />
             </div>
         </div>
     );
