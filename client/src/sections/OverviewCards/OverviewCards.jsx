@@ -2,7 +2,7 @@ import StandardCard from "../../components/cards/StandardCard";
 import "./OverviewCards.css";
 import ArticleIcon from "@mui/icons-material/Article";
 import StarIcon from "@mui/icons-material/Star";
-import ApartmentIcon from "@mui/icons-material/Apartment";
+import PercentIcon from "@mui/icons-material/Percent";
 
 function OverviewCards() {
     return (
@@ -16,7 +16,7 @@ function OverviewCards() {
                 <StandardCard
                     title={"Latest Resume Score"}
                     subtitle={"98%"}
-                    icon={<ApartmentIcon />}
+                    icon={<PercentIcon />}
                 />
                 <StandardCard
                     title={"Hit back Ratio"}

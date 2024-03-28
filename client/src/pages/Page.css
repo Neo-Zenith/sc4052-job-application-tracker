@@ -105,3 +105,18 @@
     outline: none;
     border-color: var(--color-primary-500);
 }
+
+.resume-score-title {
+    font: 500 1.5rem 'Inter';
+    color: white;
+}
+
+.resume-score {
+    font: 600 5rem 'Inter';
+    color: var(--color-primary-500);
+}
+
+.resume-score-scale {
+    font: 400 2.5rem 'Inter';
+    color: white;
+}
