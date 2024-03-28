@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ApplicationsPage from "./pages/ApplicationsPage";
 import ResumePage from "./pages/ResumePage";
 import ResumeScorePage from "./pages/ResumeScorePage";
+import ResumeListPage from "./pages/ResumeListPage";
 
 function App() {
     return (
@@ -20,7 +21,8 @@ function App() {
                         element={<ApplicationsPage />}
                     />
                     <Route path="/upload-resume" element={<ResumePage />} />
-                    <Route path="resume/:id" element={<ResumeScorePage />} />
+                    <Route path="/resume/:id" element={<ResumeScorePage />} />
+                    <Route path="/resumes" element={<ResumeListPage />} />
                 </Routes>
             </Router>
             <Toaster
