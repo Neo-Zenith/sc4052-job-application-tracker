@@ -40,9 +40,9 @@ function Sidebar() {
                         <AutorenewIcon />
                         Update Application Status
                     </a>
-                    <a className="sidebar__link" href="/">
+                    <a className="sidebar__link" href="/upload-resume">
                         <DocumentScannerIcon />
-                        Check Resume Score
+                        Analyze Resume
                     </a>
                 </div>
             </div>

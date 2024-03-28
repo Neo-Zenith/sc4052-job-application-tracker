@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import SignupPage from "./pages/SignupPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ApplicationsPage from "./pages/ApplicationsPage";
+import ResumePage from "./pages/ResumePage";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                         path="/applications"
                         element={<ApplicationsPage />}
                     />
+                    <Route path="/upload-resume" element={<ResumePage />} />
                 </Routes>
             </Router>
             <Toaster
