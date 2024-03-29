@@ -3,6 +3,7 @@ package com.example.applicationtrackerserver.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.applicationtrackerserver.exceptions.ApplicationExceptions.ApplicationNotFoundException;
 import com.example.applicationtrackerserver.models.Application;
 import com.example.applicationtrackerserver.repository.ApplicationRepository;
 import com.example.applicationtrackerserver.utils.GeminiClient;
@@ -16,29 +17,23 @@ public class GeminiService {
     @Autowired
     private GeminiClient geminiClient;
 
-    public String tailorResume(String resume, Long jobApplicationId) throws RuntimeException {
+    public String[] reviewResume(String resume, Long jobApplicationId) throws Exception, ApplicationNotFoundException {
         // Fetch the job application from the database
         Application jobApplication = applicationRepository.findById(jobApplicationId)
-                .orElseThrow(() -> new RuntimeException("Job application not found"));
+                .orElseThrow(() -> new ApplicationNotFoundException(
+                        "Job application with ID " + jobApplicationId + " not found"));
 
         // Make a request to Gemini to tailor the resume
-        try {
-            return geminiClient.tailorResume(resume, jobApplication.getJobDescription());
-        } catch (Exception e) {
-            throw new RuntimeException("Error tailoring resume: " + e.getMessage());
-        }
+        return geminiClient.reviewResume(resume, jobApplication).split("--");
     }
 
-    public String generateCoverLetter(Long jobApplicationId) {
+    public String generateCoverLetter(Long jobApplicationId) throws Exception, ApplicationNotFoundException {
         // Fetch the job application from the database
         Application jobApplication = applicationRepository.findById(jobApplicationId)
-                .orElseThrow(() -> new RuntimeException("Job application not found"));
+                .orElseThrow(() -> new ApplicationNotFoundException(
+                        "Job application with ID " + jobApplicationId + " not found"));
 
         // Make a request to Gemini to craft the cover letter
-        try {
-            return geminiClient.generateCoverLetter(jobApplication.getJobDescription());
-        } catch (Exception e) {
-            throw new RuntimeException("Error tailoring resume: " + e.getMessage());
-        }
+        return geminiClient.generateCoverLetter(jobApplication);
     }
 }

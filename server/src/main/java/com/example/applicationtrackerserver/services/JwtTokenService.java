@@ -6,6 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,10 @@ public class JwtTokenService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Long extractUserId(String token) {
+    public Long extractUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = (String) authentication.getCredentials();
+        logger.info("Token extracted from authentication: " + token);
         return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 

@@ -11,11 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.applicationtrackerserver.models.Application;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @Component
 public class GeminiClient {
@@ -35,7 +36,8 @@ public class GeminiClient {
         }
     }
 
-    public String tailorResume(String resume, String jobDescription) throws RuntimeException {
+    public String reviewResume(String resume, Application jobApplication)
+            throws Exception, HttpClientErrorException {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -43,9 +45,35 @@ public class GeminiClient {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
+            String prompt = """
+                        ### Instruction ###\n
+                        Imagine you are a career guidance coach.\n
+                        Your client is applying for a job as a %s at %s.\n
+                        Review your client's resume and give specific feedbacks for improvement in
+                        bullet points based on the job description for the job application.\n
+                        Do not include any feedback related to the fonts and formatting of the resume.\n
+                        Do not use markdown in the output.\n
+                        Finally, rate the resume out of 100.\n
+
+                        ### Context ###\n
+                        Job Description:\n
+                        %s\n
+                        Resume:\n
+                        %s\n
+
+                        ### Output Format ###\n
+                        -- <Feedback 1>\n
+                        -- <Feedback 2>\n
+                        -- ...\n
+                        -- Rating: ../100\n
+                    """;
+
+            String finalPrompt = String.format(prompt, jobApplication.getJobTitle(), jobApplication.getCompanyName(),
+                    jobApplication.getJobDescription(), resume);
+            logger.debug(finalPrompt);
+
             // Create request body
-            String requestBody = "{\"contents\":[{\"parts\":[{\"text\":\"Provide feedback for this resume according to this job description in bullet points.\n Resume is\n"
-                    + resume + "\nJob Description is\n" + jobDescription + "\n\"}]}]}";
+            String requestBody = String.format("{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}", finalPrompt);
 
             // Create request entity
             RequestEntity<String> requestEntity = new RequestEntity<>(requestBody, headers, HttpMethod.POST,
@@ -57,7 +85,7 @@ public class GeminiClient {
 
             // Handle response
             if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("failed to make request to Gemini");
+                throw new HttpClientErrorException(response.getStatusCode(), response.getBody());
             }
 
             logger.info("Got response from Gemini!");
@@ -74,22 +102,21 @@ public class GeminiClient {
                     JSONObject part = parts.getJSONObject(j);
                     result = part.getString("text");
                     logger.debug(result);
-                    break;
+                    return result;
                 }
                 break;
             }
-
-            return result;
+            throw new Exception("No results from Gemini");
         } catch (HttpClientErrorException e) {
-            logger.info("Error making request: " + e.getMessage());
-            throw new RuntimeException(e);
+            logger.info("Error making request: " + e.getStatusCode() + " - " + e.getMessage());
+            throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
         } catch (Exception e) {
             logger.info("Failed to tailor resume: " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new Exception("Failed to tailor resume: " + e.getMessage());
         }
     }
 
-    public String generateCoverLetter(String jobDescription) {
+    public String generateCoverLetter(Application jobApplication) throws Exception, HttpClientErrorException {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -97,9 +124,27 @@ public class GeminiClient {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
+            String prompt = """
+                        ### Instruction ###\n
+                        Imagine you are a career guidance coach.\n
+                        Your client is applying for a job as a %s at %s.\n
+                        Help your client to craft a concise cover letter in 3-4 sentences based on the job description for the job application.\n
+
+                        ### Context ###\n
+                        Job Description:\n
+                        %s\n
+
+                        ### Output Format ###\n
+                        Dear Hiring Manager,\n
+                        ... (Your cover letter here)\n
+                    """;
+
+            String finalPrompt = String.format(prompt, jobApplication.getJobTitle(), jobApplication.getCompanyName(),
+                    jobApplication.getJobDescription());
+            logger.debug(finalPrompt);
+
             // Create request body
-            String requestBody = "{\"contents\":[{\"parts\":[{\"text\":\"Craft a cover letter according to this job description in paragraph format.\n Job description is:\n"
-                    + jobDescription + "\"}]}]}";
+            String requestBody = String.format("{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}", finalPrompt);
 
             // Create request entity
             RequestEntity<String> requestEntity = new RequestEntity<>(requestBody, headers, HttpMethod.POST,
@@ -111,7 +156,7 @@ public class GeminiClient {
 
             // Handle response
             if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("failed to make request to Gemini");
+                throw new HttpClientErrorException(response.getStatusCode(), response.getBody());
             }
 
             logger.info("Got response from Gemini!");
@@ -123,23 +168,20 @@ public class GeminiClient {
                 JSONObject candidate = candidates.getJSONObject(i);
                 JSONObject content = candidate.getJSONObject("content");
                 JSONArray parts = content.getJSONArray("parts");
-
                 for (int j = 0; j < parts.length();) {
                     JSONObject part = parts.getJSONObject(j);
                     result = part.getString("text");
                     logger.debug(result);
-                    break;
+                    return result;
                 }
-                break;
             }
-
-            return result;
+            throw new Exception("No results from Gemini");
         } catch (HttpClientErrorException e) {
-            logger.info("Error making request: " + e.getMessage());
-            throw new RuntimeException(e);
+            logger.info("Error making request: " + e.getStatusCode() + " - " + e.getMessage());
+            throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
         } catch (Exception e) {
             logger.info("Failed to generate cover letter: " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new Exception("Failed to generate cover letter: " + e.getMessage());
         }
     }
 }

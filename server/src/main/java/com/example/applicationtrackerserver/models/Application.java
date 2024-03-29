@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.example.applicationtrackerserver.enums.ApplicationStatus;
+import com.example.applicationtrackerserver.enums.JobType;
+
 @Entity
 @Table(name = "applications")
 @Data
@@ -36,7 +39,8 @@ public class Application {
     private String source;
 
     @Column(nullable = false)
-    private String jobType;
+    @Enumerated(EnumType.STRING)
+    private JobType jobType;
 
     @Column(nullable = true)
     private String remark;
@@ -49,28 +53,17 @@ public class Application {
     private User user;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status;
 
     @Column(nullable = false)
     private LocalDateTime createdOn;
 
+    @Column(nullable = true)
+    private LocalDateTime appliedOn;
+
     @Column(nullable = false)
     private LocalDateTime lastUpdated;
-
-    public Application(String applicationUrl, String companyName, String companyUrl, String jobTitle,
-            String jobDescription, String source, String jobType, String remark, String coverLetter,
-            String status) {
-        this.applicationUrl = applicationUrl;
-        this.companyName = companyName;
-        this.companyUrl = companyUrl;
-        this.jobTitle = jobTitle;
-        this.jobDescription = jobDescription;
-        this.source = source;
-        this.jobType = jobType;
-        this.remark = remark;
-        this.coverLetter = coverLetter;
-        this.status = status;
-    }
 
     @Override
     public String toString() {

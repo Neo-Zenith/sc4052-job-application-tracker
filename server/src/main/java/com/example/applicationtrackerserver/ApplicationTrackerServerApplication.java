@@ -20,4 +20,5 @@ public class ApplicationTrackerServerApplication {
 			return "Hello, " + ip + "!";
 		}
 	}
+
 }

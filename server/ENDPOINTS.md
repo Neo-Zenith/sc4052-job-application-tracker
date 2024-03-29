@@ -117,6 +117,21 @@ Deletes a user by their ID.
 
 ---
 
+## `GET /applications/{id}`
+
+Retrieves an application by its ID.
+
+### Parameters
+
+- `id`: The ID of the application.
+
+### Response
+
+- `200 OK`: Returns the application with the specified ID.
+- `404 Not Found`: If the application with the specified ID does not exist.
+
+---
+
 ## `GET /applications`
 
 Retrieves a list of all applications.
@@ -140,21 +155,6 @@ Retrieves the count of applications created in the last 7 days.
 ### Response
 
 - `200 OK`: Returns the count of applications in the last 7 days.
-
----
-
-## `GET /applications/{id}`
-
-Retrieves an application by its ID.
-
-### Parameters
-
-- `id`: The ID of the application.
-
-### Response
-
-- `200 OK`: Returns the application with the specified ID.
-- `404 Not Found`: If the application with the specified ID does not exist.
 
 ---
 

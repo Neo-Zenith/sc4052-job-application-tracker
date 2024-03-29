@@ -1,15 +1,15 @@
 package com.example.applicationtrackerserver.services;
 
+import com.example.applicationtrackerserver.exceptions.ApplicationExceptions.ApplicationNotFoundException;
+import com.example.applicationtrackerserver.exceptions.UserExceptions.UserNotFoundException;
 import com.example.applicationtrackerserver.models.Application;
 import com.example.applicationtrackerserver.models.User;
 import com.example.applicationtrackerserver.repository.ApplicationRepository;
-import com.example.applicationtrackerserver.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.time.LocalDateTime;
 
 @Service
@@ -19,31 +19,32 @@ public class ApplicationService {
     private ApplicationRepository applicationRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
     }
 
-    public List<Application> getApplicationsByUserId(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public List<Application> getApplicationsByUserId(long userId) throws UserNotFoundException {
+        User user = userService.getUserById(userId);
         return applicationRepository.findByUser(user);
     }
 
-    public Optional<Application> getApplicationById(Long id) {
-        return applicationRepository.findById(id);
+    public Application getApplicationById(Long id) throws ApplicationNotFoundException {
+        return applicationRepository.findById(id)
+                .orElseThrow(() -> new ApplicationNotFoundException("Application wtih ID " + id + " not found"));
     }
 
     public List<Application> getApplicationsByStatus(String status) {
         return applicationRepository.findByStatus(status);
     }
 
-    public List<Application> getApplicationsByUserIdAndStatus(long userId, String status) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public List<Application> getApplicationsByUserIdAndStatus(long userId, String status) throws UserNotFoundException {
+        User user = userService.getUserById(userId);
         return applicationRepository.findByUserAndStatus(user, status);
     }
 
-    public int getCountOfApplicationsLast7Days() {
+    public List<ApplicationRepository.DateCount> getCountOfApplicationsLast7Days() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime sevenDaysAgo = currentDateTime.minusDays(7);
         return applicationRepository.countByCreatedOnBetween(sevenDaysAgo, currentDateTime);
@@ -57,25 +58,10 @@ public class ApplicationService {
         applicationRepository.deleteById(id);
     }
 
-    public Application updateApplication(Application updatedApplication) throws RuntimeException {
-        Optional<Application> existingApplication = applicationRepository.findById(updatedApplication.getId());
-        if (!existingApplication.isPresent()) {
-            throw new RuntimeException("Application not found");
+    public Application updateApplication(Application updatedApplication) throws ApplicationNotFoundException {
+        if (!applicationRepository.existsById(updatedApplication.getId())) {
+            throw new ApplicationNotFoundException("Application wtih ID " + updatedApplication.getId() + " not found");
         }
-
-        Application application = existingApplication.get();
-        application.setApplicationUrl(updatedApplication.getApplicationUrl());
-        application.setCompanyName(updatedApplication.getCompanyName());
-        application.setJobTitle(updatedApplication.getJobTitle());
-        application.setJobDescription(updatedApplication.getJobDescription());
-        application.setSource(updatedApplication.getSource());
-        application.setJobType(updatedApplication.getJobType());
-        application.setRemark(updatedApplication.getRemark());
-        application.setCoverLetter(updatedApplication.getCoverLetter());
-        application.setUser(updatedApplication.getUser());
-        application.setStatus(updatedApplication.getStatus());
-        application.setCreatedOn(updatedApplication.getCreatedOn());
-        application.setLastUpdated(updatedApplication.getLastUpdated());
-        return applicationRepository.save(application);
+        return applicationRepository.save(updatedApplication);
     }
 }

@@ -27,7 +27,7 @@ import com.example.applicationtrackerserver.middleware.JwtFilter;
 import com.example.applicationtrackerserver.services.UserInfoDetailsService;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/api/v1/auth/**").permitAll()
+                        .requestMatchers("/", "/api-docs/**", "/swagger-ui/**", "/favicon.ico", "/api/v1/auth/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

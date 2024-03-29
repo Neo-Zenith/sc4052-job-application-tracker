@@ -1,10 +1,15 @@
 package com.example.applicationtrackerserver.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum ApplicationStatus {
+    VIEWED("Viewed"),
     APPLIED("Applied"),
-    IN_PROGRESS("In Progress"),
+    ASSESSMENT("Assessment"),
+    INTERVIEW("Interview"),
     REJECTED("Rejected"),
-    COMPLETED("Completed");
+    OFFERED("Offered"),
+    GHOSTED("Ghosted");
 
     private final String status;
 
@@ -16,9 +21,10 @@ public enum ApplicationStatus {
         return this.status;
     }
 
-    public static ApplicationStatus fromString(String status) {
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ApplicationStatus fromString(String type) {
         for (ApplicationStatus applicationStatus : ApplicationStatus.values()) {
-            if (applicationStatus.getStatus().equalsIgnoreCase(status)) {
+            if (applicationStatus.getStatus().equalsIgnoreCase(type)) {
                 return applicationStatus;
             }
         }

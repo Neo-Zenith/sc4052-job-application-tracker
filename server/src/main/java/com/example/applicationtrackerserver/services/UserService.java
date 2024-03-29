@@ -1,6 +1,6 @@
 package com.example.applicationtrackerserver.services;
 
-import com.example.applicationtrackerserver.exceptions.UserExceptions;
+import com.example.applicationtrackerserver.exceptions.UserExceptions.UserNotFoundException;
 import com.example.applicationtrackerserver.models.User;
 import com.example.applicationtrackerserver.repository.UserRepository;
 
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,29 +25,34 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) throws UserNotFoundException {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) throws UserNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) throws UserNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
     }
 
-    public User updateUser(User updatedUser) throws UserExceptions.UserNotFoundException {
-        Optional<User> existingUser = userRepository.findById(updatedUser.getId());
-        if (!existingUser.isPresent()) {
-            throw new UserExceptions.UserNotFoundException("User not found");
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public User updateUser(User updatedUser) throws UserNotFoundException {
+        if (!userRepository.existsById(updatedUser.getId())) {
+            throw new UserNotFoundException("User with ID " + updatedUser.getId() + " not found");
         }
-
-        User user = existingUser.get();
-        user.setUsername(user.getUsername());
-        user.setEmail(user.getEmail());
-        user.setPassword(user.getPassword());
-        return userRepository.save(user);
+        return userRepository.save(updatedUser);
     }
 
     public void deleteUser(Long id) {
