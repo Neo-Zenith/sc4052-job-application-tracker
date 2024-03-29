@@ -51,9 +51,6 @@ function onUpdateApplications() {
 function onLogout() {
 	// Remove the token from the local storage
 	chrome.storage.local.remove("jwtToken", function () {
-		// Update the UI
-		setTimeout(() => {
-			location.reload();
-		}, 2000);
+		onLogin();
 	});
 }

@@ -1,6 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+:root {
+	/** CSS DARK THEME PRIMARY COLORS */
+	--color-primary-100: #382bf0;
+	--color-primary-200: #5e43f3;
+	--color-primary-300: #7a5af5;
+	--color-primary-400: #9171f8;
+	--color-primary-500: #a688fa;
+	--color-primary-600: #ba9ffb;
+
+	/** CSS DARK THEME SURFACE COLORS */
+	--color-surface-100: #121212;
+	--color-surface-200: #282828;
+	--color-surface-300: #160f0f;
+	--color-surface-400: #575757;
+	--color-surface-500: #717171;
+	--color-surface-600: #8b8b8b;
+
+	/** CSS DARK THEME MIXED SURFACE COLORS */
+	--color-surface-mixed-100: #1a1625;
+	--color-surface-mixed-200: #2f2b3a;
+	--color-surface-mixed-300: #46424f;
+	--color-surface-mixed-400: #5e5a66;
+	--color-surface-mixed-500: #76737e;
+	--color-surface-mixed-600: #908d96;
+}
+
 body {
-	font-family: Arial, sans-serif;
-	background-color: #f2f2f2;
+	font-family: "Inter", sans-serif;
+	background-color: var(--color-surface-100);
+	color: var(--color-surface-mixed-600);
 	box-sizing: border-box;
 	width: 400px;
 	height: 450px;
@@ -8,9 +37,22 @@ body {
 	padding: 0;
 }
 
+/* Scroll Bars */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #888;
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #555;
+}
+
 h1 {
-	color: #007bff;
-	text-align: center;
+	color: var(--color-primary-300);
 	margin-top: 0;
 }
 
@@ -19,12 +61,18 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
 	text-align: center;
 }
 
-p {
-	text-align: center;
+a {
+	color: var(--color-primary-300);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--color-primary-600);
 }
 
 button {
@@ -33,7 +81,7 @@ button {
 	padding: 10px 20px;
 	border: none;
 	border-radius: 5px;
-	background-color: #007bff;
+	background-color: var(--color-primary-300);
 	color: #fff;
 	text-decoration: none;
 	font-size: 16px;
@@ -42,7 +90,7 @@ button {
 }
 
 button:hover {
-	background-color: #0056b3;
+	background-color: var(--color-primary-100);
 }
 
 .container {
@@ -53,4 +101,59 @@ button:hover {
 	padding: 20px;
 	height: 100%;
 	margin: 0;
+}
+
+#actionBtns {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	margin-top: 10px;
+	gap: 10px;
+}
+
+#actionBtns button {
+	margin: 0;
+}
+
+#actionBtns.col {
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* Loading animation */
+.loading::after {
+	content: "";
+	display: inline-block;
+	width: 100%;
+	height: 13px;
+	border-radius: 75%;
+	border: 2px solid #fff;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	animation: spin 0.8s linear infinite;
+	margin-left: -2.5px;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Dropdown */
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	width: 45%;
+	padding: 5px 10px;
+	background-color: #f0f0f0;
+	border: none;
+	border-radius: 5px;
+
+	background-image: url("../assets/chevron-down.svg");
+	background-repeat: no-repeat;
+	background-position: right 0.7em top 50%, 0 0;
+	background-size: 0.65em auto, 100%;
 }

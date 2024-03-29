@@ -1,6 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
+	const applicationsLabel =
+		document.getElementsByClassName("applications-label")[0];
+	let loadingDiv = document.getElementsByClassName("loading")[0];
+
 	getToken()
 		.then((token) => {
+			applicationsLabel.textContent = "Loading applications...";
+			loadingDiv.style.display = "block";
+			loadingDiv.style.margin = "2rem auto";
 			const payload = JSON.parse(atob(token.split(".")[1]));
 			console.log("payload:", payload);
 
@@ -13,39 +20,49 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 		.then((response) => response.json())
 		.then((applications) => {
-			// Store the fetched applications in a list
-			const applicationList = applications;
+			loadingDiv.style.display = "none";
 
-			// Display the applications in applications.html
-			const listContainer = document.getElementById("cardsContainer");
-			console.log("Creating job cards...");
-			applicationList.forEach((application) => {
-				const card = document.createElement("div");
-				card.classList.add("card");
+			// Display the applications
+			createApplicationCards(applications);
 
-				const heading = document.createElement("h3");
-				heading.textContent = application.jobTitle;
-
-				const details = document.createElement("p");
-				details.textContent = application.companyName;
-
-				card.appendChild(heading);
-				card.appendChild(details);
-
-				card.addEventListener("click", () => {
-					const cardData = { ...application };
-					console.log(cardData);
-					openNewHTMLFile(cardData);
-				});
-
-				listContainer.appendChild(card);
-			});
+			applicationsLabel.textContent = "Select an application to update";
 		})
 		.catch((error) => {
-			// Handle any errors that occur during the fetch
+			loadingDiv.remove();
+			loadingDiv.style.display = "none";
+			applicationsLabel.textContent = "Failed to load applications";
 			console.error(error);
 		});
 });
+
+document.getElementById("backBtn").addEventListener("click", function () {
+	window.history.back();
+});
+
+function createApplicationCards(applications) {
+	const listContainer = document.getElementById("cardsContainer");
+	console.log("Creating job cards...");
+	applications.forEach((application) => {
+		const card = document.createElement("div");
+		card.classList.add("card");
+
+		const heading = document.createElement("h3");
+		heading.textContent = application.jobTitle;
+
+		const details = document.createElement("p");
+		details.textContent = application.companyName;
+
+		card.appendChild(heading);
+		card.appendChild(details);
+
+		card.addEventListener("click", () => {
+			const cardData = { ...application };
+			openNewHTMLFile(cardData);
+		});
+
+		listContainer.appendChild(card);
+	});
+}
 
 // Encode a string to base64
 function base64Encode(str) {

@@ -1,3 +1,8 @@
+(() => {
+	console.log("[Extension] LinkedIn Job Saver is active!");
+	displayToast("LinkedIn Job Saver is active!");
+})();
+
 document.addEventListener("click", async function (event) {
 	console.log("[Extension] Clicked", isApply(event));
 	if (isApply(event)) {
@@ -5,27 +10,41 @@ document.addEventListener("click", async function (event) {
 		const jobDetails = await extractJobDetails();
 		const payload = {
 			...jobDetails,
-			status: "Applied",
+			status: "Viewed",
 			source: "LinkedIn",
 		};
-		console.log("[Extension]", payload);
 
+		console.log("[Extension]", payload);
 		console.log("[Extension] Saving job...");
 		chrome.runtime.sendMessage(
 			{ type: "SAVE_JOB", payload: payload },
 			function (response) {
 				if (response.success) {
 					console.log("[Extension] Job saved successfully");
-					displayModal();
+					displayToast("Job application saved!");
 				} else {
 					console.log("[Extension] Failed to save job");
+				}
+			}
+		);
+	} else if (isSubmitApplication(event)) {
+		payload = { status: "Applied" };
+		console.log("[Extension] Updating job...");
+		chrome.runtime.sendMessage(
+			{ type: "UPDATE_JOB", payload: payload },
+			function (response) {
+				if (response.success) {
+					console.log("[Extension] Job updated successfully");
+					displayToast("Job application updated!");
+				} else {
+					console.log("[Extension] Failed to update job");
 				}
 			}
 		);
 	}
 });
 
-function displayModal() {
+function displayToast(message) {
 	const modalDiv = document.createElement("div");
 	modalDiv.style.position = "fixed";
 	modalDiv.style.top = "5%";
@@ -37,7 +56,7 @@ function displayModal() {
 	modalDiv.style.display = "flex";
 	modalDiv.style.justifyContent = "center";
 	modalDiv.style.alignItems = "center";
-	modalDiv.style.zIndex = "9999";
+	modalDiv.style.zIndex = "2147483647";
 	modalDiv.style.padding = "10px 15px";
 	modalDiv.style.borderRadius = "25px";
 	modalDiv.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.2)";
@@ -45,7 +64,7 @@ function displayModal() {
 	modalDiv.style.opacity = "0";
 
 	const modalText = document.createElement("p");
-	modalText.innerText = "Job application saved!";
+	modalText.innerText = message;
 	modalText.style.color = "#f2f2f2";
 	modalText.style.fontWeight = "bold";
 	modalText.style.fontSize = "20px";
@@ -72,6 +91,17 @@ function isApply(event) {
 		event.target.innerText.toLowerCase().includes("apply");
 
 	return applyDivClicked || applyButtonClicked || applySpanClicked;
+}
+
+function isSubmitApplication(event) {
+	applyButtonClicked = event.target.matches(
+		".artdeco-button[aria-label*='Submit Application']"
+	);
+	applySpanClicked =
+		event.target.matches(".artdeco-button__text") &&
+		event.target.innerText.toLowerCase().includes("submit application");
+
+	return applyButtonClicked || applySpanClicked;
 }
 
 // Extract job details from the page

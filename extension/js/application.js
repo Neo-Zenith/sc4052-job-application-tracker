@@ -1,3 +1,17 @@
+async function getToken() {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get("jwtToken", (result) => {
+			const token = result.jwtToken;
+
+			if (token) {
+				resolve(token);
+			} else {
+				reject("No token found");
+			}
+		});
+	});
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 	// Get the query string from the URL
 	let params = new URLSearchParams(window.location.search);
@@ -10,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Convert the JSON string to an object
 	jsonData = JSON.parse(decodedData);
-
 	console.log(jsonData);
 
 	createJobCard();
@@ -58,7 +71,6 @@ function createForm(application) {
 	emptyOption.disabled = true;
 	fieldSelect.insertBefore(emptyOption, fieldSelect.firstChild);
 
-	// Add event listener to fieldSelect
 	fieldSelect.addEventListener("change", function () {
 		// Remove old dropdown if it exists
 		const oldContentDiv = document.getElementById("updatedContentDiv");
@@ -74,14 +86,8 @@ function createForm(application) {
 		updatedContentDiv.appendChild(lineBreak);
 
 		if (this.value === "Status") {
-			const fieldSelectLabel = document.createElement("label");
-			fieldSelectLabel.setAttribute("for", "updatedContent");
-			fieldSelectLabel.textContent = "Select updated status:";
-			updatedContentDiv.appendChild(fieldSelectLabel);
-
-			const dropdown = document.createElement("select");
-			dropdown.id = "updatedContent";
 			const fieldOptions = [
+				"Viewed",
 				"Applied",
 				"Assessment",
 				"Interview",
@@ -89,52 +95,17 @@ function createForm(application) {
 				"Rejected",
 				"Ghosted",
 			];
-			fieldOptions.forEach((option) => {
-				const fieldOption = document.createElement("option");
-				fieldOption.value = option;
-				fieldOption.textContent =
-					option.charAt(0).toUpperCase() + option.slice(1);
-				dropdown.appendChild(fieldOption);
-			});
-			updatedContentDiv.appendChild(dropdown);
+			createDropdown(updatedContentDiv, fieldOptions);
 		} else if (this.value === "Source") {
-			const fieldSelectLabel = document.createElement("label");
-			fieldSelectLabel.setAttribute("for", "updatedContent");
-			fieldSelectLabel.textContent = "Select updated source:";
-			updatedContentDiv.appendChild(fieldSelectLabel);
-
-			const dropdown = document.createElement("select");
-			dropdown.id = "updatedContent";
 			const fieldOptions = ["LinkedIn"];
-			fieldOptions.forEach((option) => {
-				const fieldOption = document.createElement("option");
-				fieldOption.value = option;
-				fieldOption.textContent =
-					option.charAt(0).toUpperCase() + option.slice(1);
-				dropdown.appendChild(fieldOption);
-			});
-			updatedContentDiv.appendChild(dropdown);
+			createDropdown(updatedContentDiv, fieldOptions);
 		} else if (this.value === "Job Type") {
-			const fieldSelectLabel = document.createElement("label");
-			fieldSelectLabel.setAttribute("for", "updatedContent");
-			fieldSelectLabel.textContent = "Select updated job type:";
-			updatedContentDiv.appendChild(fieldSelectLabel);
-
-			const dropdown = document.createElement("select");
-			dropdown.id = "updatedContent";
 			const fieldOptions = ["Full-Time", "Part-Time", "Internship", "Contract"];
-			fieldOptions.forEach((option) => {
-				const fieldOption = document.createElement("option");
-				fieldOption.value = option;
-				fieldOption.textContent =
-					option.charAt(0).toUpperCase() + option.slice(1);
-				dropdown.appendChild(fieldOption);
-			});
-			updatedContentDiv.appendChild(dropdown);
+			createDropdown(updatedContentDiv, fieldOptions);
 		} else {
 			const updatedContentLabel = document.createElement("label");
 			updatedContentLabel.setAttribute("for", "updatedContent");
-			updatedContentLabel.textContent = "Updated Content:";
+			updatedContentLabel.textContent = "Updated content:";
 			updatedContentDiv.appendChild(updatedContentLabel);
 
 			const updatedContentInput = document.createElement("textarea");
@@ -147,23 +118,33 @@ function createForm(application) {
 	formContainer.appendChild(lineBreak);
 
 	const actionBtnDiv = document.getElementById("actionBtns");
+	createUpdateBtn(actionBtnDiv, formContainer, application);
+}
 
+function createUpdateBtn(parentElement, formContainer, application) {
 	const submitButton = document.createElement("button");
 	submitButton.type = "submit";
 	submitButton.textContent = "Update";
 	submitButton.setAttribute("form", "updateForm");
-	actionBtnDiv.appendChild(submitButton);
+	parentElement.appendChild(submitButton);
 
 	formContainer.addEventListener("submit", function (event) {
 		event.preventDefault();
 
+		submitButton.classList.add("loading");
+		submitButton.innerText = "";
+		submitButton.disabled = true;
+
 		const fieldSelect = document.getElementById("fieldSelect");
 		const selectedField = fieldSelect.value;
 
+		if (selectedField === "") {
+			alert("Please select a field to update");
+			return;
+		}
+
 		const updatedContentInput = document.getElementById("updatedContent");
 		const updatedContent = updatedContentInput.value;
-
-		// TODO: Perform input validation
 
 		const payload = {
 			...application,
@@ -187,14 +168,38 @@ function createForm(application) {
 			})
 			.then((data) => {
 				console.log("Success:", data);
+				submitButton.classList.remove("loading");
+				submitButton.innerText = "Update";
+				submitButton.disabled = false;
 				setTimeout(() => {
 					window.open("../templates/popup.html", "_self");
-				}, 10000);
+				}, 1000);
 			})
 			.catch((error) => {
+				submitButton.classList.remove("loading");
+				submitButton.innerText = "Update";
+				submitButton.disabled = false;
 				console.error("Error:", error);
 			});
 	});
+}
+
+function createDropdown(parentElement, fieldOptions) {
+	const fieldSelectLabel = document.createElement("label");
+	fieldSelectLabel.setAttribute("for", "updatedContent");
+	fieldSelectLabel.textContent = "Select updated value:";
+	parentElement.appendChild(fieldSelectLabel);
+
+	const dropdown = document.createElement("select");
+	dropdown.id = "updatedContent";
+	fieldOptions.forEach((option) => {
+		const fieldOption = document.createElement("option");
+		fieldOption.value = option;
+		fieldOption.textContent = option.charAt(0).toUpperCase() + option.slice(1);
+		dropdown.appendChild(fieldOption);
+	});
+	parentElement.appendChild(dropdown);
+	return dropdown;
 }
 
 function createJobCard() {
@@ -227,11 +232,6 @@ function createJobCard() {
 	jobDescription.innerHTML = `<strong>Job Description:</strong> ${jsonData.jobDescription}`;
 	jobCard.appendChild(jobDescription);
 
-	let remark = document.createElement("p");
-	remark.classList.add("job-description");
-	remark.innerHTML = `<strong>Remark:</strong> ${jsonData.remark || "N/A"}`;
-	jobCard.appendChild(remark);
-
 	let source = document.createElement("p");
 	source.innerHTML = `<strong>Source:</strong> ${jsonData.source}`;
 	jobCard.appendChild(source);
@@ -243,9 +243,16 @@ function createJobCard() {
 	let status = document.createElement("p");
 	status.innerHTML = `<strong>Status:</strong> ${jsonData.status}`;
 	jobCard.appendChild(status);
+
+	let remark = document.createElement("p");
+	remark.classList.add("job-description");
+	remark.innerHTML = `<strong>Remark:</strong> ${jsonData.remark || "N/A"}`;
+	jobCard.appendChild(remark);
 }
 
-// Decode a base64 string
+/** 
+	Decode a base64 string
+**/
 function base64Decode(base64) {
 	let binary = atob(base64);
 	let data = new Uint8Array(binary.length);
@@ -254,18 +261,4 @@ function base64Decode(base64) {
 	}
 	let decoder = new TextDecoder();
 	return decoder.decode(data);
-}
-
-async function getToken() {
-	return new Promise((resolve, reject) => {
-		chrome.storage.local.get("jwtToken", (result) => {
-			const token = result.jwtToken;
-
-			if (token) {
-				resolve(token);
-			} else {
-				reject("No token found");
-			}
-		});
-	});
 }

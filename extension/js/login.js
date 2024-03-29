@@ -4,10 +4,17 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 	const username = document.getElementById("username").value;
 	const password = document.getElementById("password").value;
 
-	const statusMessage = document.createElement("div"); // Create a new div element
-	statusMessage.id = "statusMessage"; // Set the id of the status message element
-	statusMessage.textContent = "Making request to login..."; // Set the initial status message
-	document.getElementById("loginForm").appendChild(statusMessage); // Append the status message element to the login form
+	let statusMessage = document.getElementById("statusMessage");
+	if (statusMessage == null) {
+		statusMessage = document.createElement("div");
+		statusMessage.id = "statusMessage";
+		statusMessage.textContent = "Making request to login...";
+		document.getElementById("loginForm").appendChild(statusMessage);
+	}
+
+	const btn = document.getElementById("submitBtn");
+	btn.innerText = "";
+	btn.classList.add("loading");
 
 	fetch("http://172.171.242.107:8080/api/v1/auth/login", {
 		method: "POST",
@@ -18,21 +25,25 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 	})
 		.then((response) => {
 			if (!response.ok) {
-				throw new Error(`Error occurred during login!`); // Throw an error if the response is not ok
+				throw new Error(`Error occurred during login!`);
 			}
-			return response.json(); // Return the response as JSON
+			return response.json();
 		})
 		.then((data) => {
 			console.log(data);
 			// Store the token
 			chrome.storage.local.set({ jwtToken: data.token });
-			statusMessage.textContent = "Login successful!"; // Update the status message
+			btn.classList.remove("loading");
+			btn.innerText = "Submit";
+			statusMessage.textContent = "Login successful! Redirecting...";
 			setTimeout(() => {
 				window.open("../templates/popup.html", "_self");
-			}, 3000);
+			}, 1500);
 		})
 		.catch((error) => {
 			console.error("Error:", error);
-			statusMessage.textContent = "Error occurred during login!"; // Update the status message
+			btn.classList.remove("loading");
+			btn.innerText = "Submit";
+			statusMessage.textContent = "Error occurred during login!";
 		});
 });
