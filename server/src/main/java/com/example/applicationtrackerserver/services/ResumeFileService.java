@@ -11,11 +11,20 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
-public class ResumeService {
+public class ResumeFileService {
     private static final String STORAGE_DIR = "resumes";
-    private static final String SUPPORTED_FILE_EXTENSION = ".pdf";
 
-    public String saveResume(MultipartFile file, Long userId) throws IOException {
+    public String getFileType(MultipartFile file) {
+        String[] parts = file.getOriginalFilename().split("\\.");
+        return parts[parts.length - 1];
+    }
+
+    public String getFileName(MultipartFile file) {
+        String[] parts = file.getOriginalFilename().split("\\.");
+        return parts[0];
+    }
+
+    public String saveResume(MultipartFile file, Long userId, String fileType) throws IOException {
         // Define the path where you want to store the resumes
         Path storageDirectory = Paths.get(STORAGE_DIR);
 
@@ -23,9 +32,6 @@ public class ResumeService {
         if (!Files.exists(storageDirectory)) {
             Files.createDirectories(storageDirectory);
         }
-
-        // Generate a unique resumeId
-        String resumeId = UUID.randomUUID().toString();
 
         // Create a Path object for the user's directory
         Path userDirectory = storageDirectory.resolve(userId.toString());
@@ -35,8 +41,11 @@ public class ResumeService {
             Files.createDirectories(userDirectory);
         }
 
+        String resumeId = UUID.randomUUID().toString();
+        String filePath = resumeId + "." + fileType;
+
         // Create a Path object for the new resume file
-        Path resumeFile = userDirectory.resolve(resumeId + SUPPORTED_FILE_EXTENSION);
+        Path resumeFile = userDirectory.resolve(filePath);
 
         // Copy the resume file to the server's local file system
         Files.copy(file.getInputStream(), resumeFile);
@@ -44,16 +53,18 @@ public class ResumeService {
         return resumeId;
     }
 
-    public byte[] readResume(String resumeId, Long userId) throws IOException, FileNotFoundException {
+    public byte[] readResume(Long userId, String resumeUUID, String fileType)
+            throws IOException, FileNotFoundException {
         // Create a Path object for the user's directory
         Path userDirectory = Paths.get(STORAGE_DIR).resolve(userId.toString());
 
         // Create a Path object for the resume file
-        Path resumeFile = userDirectory.resolve(resumeId + SUPPORTED_FILE_EXTENSION);
+        String filePath = resumeUUID + "." + fileType;
+        Path resumeFile = userDirectory.resolve(filePath);
 
         // Check if the resume file exists
         if (!Files.exists(resumeFile)) {
-            throw new FileNotFoundException("Resume with ID " + resumeId + " not found");
+            throw new FileNotFoundException("Resume with path " + filePath + " not found");
         }
 
         // Read the resume file as a byte arrays

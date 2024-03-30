@@ -35,4 +35,27 @@ public class FileParserService {
         }
         return content;
     }
+
+    public String parseFile(byte[] fileBytes, String fileType) throws IOException, UnsupportedFileTypeException {
+        String content = "";
+        switch (fileType) {
+            case "pdf":
+                PDDocument document = PDDocument.load(fileBytes);
+                if (document.isEncrypted()) {
+                    throw new IOException("Error reading PDF file");
+                }
+                PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+                stripper.setSortByPosition(true);
+                PDFTextStripper tStripper = new PDFTextStripper();
+                content = tStripper.getText(document);
+                document.close();
+                break;
+            case "txt":
+                content = new String(fileBytes, StandardCharsets.UTF_8);
+                break;
+            default:
+                throw new UnsupportedFileTypeException("Unsupported file type");
+        }
+        return content;
+    }
 }

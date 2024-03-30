@@ -59,9 +59,6 @@ public class Application {
     @Column(nullable = false)
     private LocalDateTime createdOn;
 
-    @Column(nullable = true)
-    private LocalDateTime appliedOn;
-
     @Column(nullable = false)
     private LocalDateTime lastUpdated;
 

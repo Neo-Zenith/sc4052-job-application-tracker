@@ -36,6 +36,89 @@ public class GeminiClient {
         }
     }
 
+    public String reviewResume(String resume, String jobDescription)
+            throws Exception, HttpClientErrorException {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            // Create headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            String prompt = """
+                    Instruction:\n
+                    Imagine you are a career guidance coach.\n
+                    Review your client's resume and give specific feedbacks for improvement in
+                    bullet points based on the job description for the job application.\n
+                    Finally, rate the resume out of 100.\n
+
+                    Constraint:\n
+                    Use -- for the bullet point and avoid markdown headings.\n
+                    Do not include any feedback related to the fonts and formatting of the resume.\n
+                    Do not use markdown in the output.\n
+                    Output the rating with format of 'Rating=?/100'\n
+
+                    Context:\n
+                    Job Description:\n
+                    %s\n
+                    Resume:\n
+                    %s\n
+
+                    Example output:\n
+                    ```
+                    -- Improve your active voice\n
+                    -- Use action words\s
+                    -- Rating=40/100\n
+                    ```
+                        """;
+
+            String finalPrompt = String.format(prompt, jobDescription, resume);
+            logger.debug(finalPrompt);
+
+            // Create request body
+            String requestBody = String.format("{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}", finalPrompt);
+
+            // Create request entity
+            RequestEntity<String> requestEntity = new RequestEntity<>(requestBody, headers, HttpMethod.POST,
+                    new URI(GEMINI_API_URL + geminiApiKey));
+
+            // Make POST request
+            logger.info("Making request to Gemini...");
+            ResponseEntity<String> response = restTemplate.exchange(requestEntity, String.class);
+
+            // Handle response
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new HttpClientErrorException(response.getStatusCode(), response.getBody());
+            }
+
+            logger.info("Got response from Gemini!");
+            JSONObject jsonObject = new JSONObject(response.getBody());
+            JSONArray candidates = jsonObject.getJSONArray("candidates");
+
+            String result = "";
+            for (int i = 0; i < candidates.length();) {
+                JSONObject candidate = candidates.getJSONObject(i);
+                JSONObject content = candidate.getJSONObject("content");
+                JSONArray parts = content.getJSONArray("parts");
+
+                for (int j = 0; j < parts.length();) {
+                    JSONObject part = parts.getJSONObject(j);
+                    result = part.getString("text");
+                    logger.info(result);
+                    return result;
+                }
+                break;
+            }
+            throw new Exception("No results from Gemini");
+        } catch (HttpClientErrorException e) {
+            logger.info("Error making request: " + e.getStatusCode() + " - " + e.getMessage());
+            throw new HttpClientErrorException(e.getStatusCode(), e.getMessage());
+        } catch (Exception e) {
+            logger.info("Failed to tailor resume: " + e.getMessage());
+            throw new Exception("Failed to tailor resume: " + e.getMessage());
+        }
+    }
+
     public String reviewResume(String resume, Application jobApplication)
             throws Exception, HttpClientErrorException {
         try {
@@ -46,26 +129,31 @@ public class GeminiClient {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             String prompt = """
-                        ### Instruction ###\n
+                        Instruction:\n
                         Imagine you are a career guidance coach.\n
                         Your client is applying for a job as a %s at %s.\n
                         Review your client's resume and give specific feedbacks for improvement in
                         bullet points based on the job description for the job application.\n
-                        Do not include any feedback related to the fonts and formatting of the resume.\n
-                        Do not use markdown in the output.\n
                         Finally, rate the resume out of 100.\n
 
-                        ### Context ###\n
+                        Constraint:\n
+                        Use -- for the bullet point and avoid markdown headings.\n
+                        Do not include any feedback related to the fonts and formatting of the resume.\n
+                        Do not use markdown in the output.\n
+                        Output the rating with format of 'Rating=?/100'\n
+
+                        Context:\n
                         Job Description:\n
                         %s\n
                         Resume:\n
                         %s\n
 
-                        ### Output Format ###\n
-                        -- <Feedback 1>\n
-                        -- <Feedback 2>\n
-                        -- ...\n
-                        -- Rating: ../100\n
+                        Example output:\n
+                        ```
+                        -- Improve your active voice\n
+                        -- Use action words\s
+                        -- Rating=40/100\n
+                        ```
                     """;
 
             String finalPrompt = String.format(prompt, jobApplication.getJobTitle(), jobApplication.getCompanyName(),
@@ -101,7 +189,7 @@ public class GeminiClient {
                 for (int j = 0; j < parts.length();) {
                     JSONObject part = parts.getJSONObject(j);
                     result = part.getString("text");
-                    logger.debug(result);
+                    logger.info(result);
                     return result;
                 }
                 break;

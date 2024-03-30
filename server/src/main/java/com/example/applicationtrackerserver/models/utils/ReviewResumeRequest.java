@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequest {
-    private String username;
-    private String password;
+public class ReviewResumeRequest {
+    private Long resumeInfoId;
+    private Long applicationId;
+    private String jobDescription;
 }

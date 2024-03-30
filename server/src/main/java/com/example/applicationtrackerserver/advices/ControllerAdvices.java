@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerAdvices {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleResourceNotFoundException(Exception ex) {
+    public ResponseEntity<Object> handleGeneralException(Exception ex) {
         Map<String, Object> response = new HashMap<String, Object>();
         response.put("message", "Error occured - " + ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

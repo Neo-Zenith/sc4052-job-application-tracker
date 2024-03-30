@@ -9,7 +9,13 @@ import com.example.applicationtrackerserver.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -44,10 +50,43 @@ public class ApplicationService {
         return applicationRepository.findByUserAndStatus(user, status);
     }
 
-    public List<ApplicationRepository.DateCount> getCountOfApplicationsLast7Days() {
+    public List<ApplicationRepository.DateCount> getCountOfApplicationsLast7Days(long userId)
+            throws UserNotFoundException {
+        User user = userService.getUserById(userId);
+
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime sevenDaysAgo = currentDateTime.minusDays(7);
-        return applicationRepository.countByCreatedOnBetween(sevenDaysAgo, currentDateTime);
+
+        // Initialize a map with all dates of the last 7 days set to 0
+        Map<LocalDate, Long> dateCounts = IntStream.range(0, 7)
+                .mapToObj(i -> currentDateTime.minusDays(i).toLocalDate())
+                .collect(Collectors.toMap(Function.identity(), date -> 0L));
+
+        // Get the counts from the database and update the map
+        List<ApplicationRepository.DateCount> dbCounts = applicationRepository.countByCreatedOnBetween(user,
+                sevenDaysAgo,
+                currentDateTime);
+        for (ApplicationRepository.DateCount dbCount : dbCounts) {
+            dateCounts.put(dbCount.getDate(), dbCount.getCount());
+        }
+
+        // Convert the map to a list of DateCount objects
+        List<ApplicationRepository.DateCount> result = new ArrayList<>();
+        for (Map.Entry<LocalDate, Long> entry : dateCounts.entrySet()) {
+            result.add(new ApplicationRepository.DateCount() {
+                @Override
+                public LocalDate getDate() {
+                    return entry.getKey();
+                }
+
+                @Override
+                public long getCount() {
+                    return entry.getValue();
+                }
+            });
+        }
+
+        return result;
     }
 
     public Application createApplication(Application application) {

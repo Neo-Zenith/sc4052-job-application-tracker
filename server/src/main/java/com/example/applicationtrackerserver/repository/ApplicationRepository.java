@@ -32,8 +32,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
                 SELECT DATE(a.createdOn) as date, COUNT(a) as count
                 FROM Application a
                 WHERE a.createdOn BETWEEN :startDate AND :endDate
+                AND a.user = :user
                 GROUP BY DATE(a.createdOn)
             """)
-    List<DateCount> countByCreatedOnBetween(@Param("startDate") LocalDateTime startDate,
+    List<DateCount> countByCreatedOnBetween(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 }

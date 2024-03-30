@@ -3,7 +3,6 @@ package com.example.applicationtrackerserver.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum ApplicationStatus {
-    VIEWED("Viewed"),
     APPLIED("Applied"),
     ASSESSMENT("Assessment"),
     INTERVIEW("Interview"),
