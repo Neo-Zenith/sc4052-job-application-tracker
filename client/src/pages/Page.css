@@ -95,10 +95,10 @@
     border-radius: 0.5rem;
     color: white;
     resize: none;
-    width: 50%;
+    width: 65%;
     min-width: 15rem;
     font: 400 1.4rem 'Inter';
-    height: 25rem;
+    height: 35rem;
 }
 
 .resume-page-textarea:focus {

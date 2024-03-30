@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "./Chart.css";
+import { ClipLoader } from "react-spinners";
 
-function PastXDaysChart({ id, title, data, xValues }) {
+function PastXDaysChart({ id, title, data, xValues, loaded }) {
     const [series, setSeries] = useState([]);
     const [options, setOptions] = useState({
         chart: {
@@ -49,14 +50,41 @@ function PastXDaysChart({ id, title, data, xValues }) {
 
     return (
         <>
-            <div className="chart-wrapper main-page-chart">
+            <div
+                className="chart-wrapper main-page-chart"
+                style={{ position: "relative" }}
+            >
+                {loaded ? null : (
+                    <div
+                        style={{
+                            display: "flex",
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "transparent",
+                            zIndex: 1,
+                        }}
+                    >
+                        <ClipLoader color="white" size={30} />
+                    </div>
+                )}
                 <span className="chart-title">{title}</span>
-                <Chart
-                    options={options}
-                    series={series}
-                    type="line"
-                    height={350}
-                />
+                <div
+                    style={{
+                        filter: loaded
+                            ? "blur(0)"
+                            : "blur(1px) brightness(0.7)",
+                    }}
+                >
+                    <Chart
+                        options={options}
+                        series={series}
+                        type="line"
+                        height={350}
+                    />
+                </div>
             </div>
         </>
     );

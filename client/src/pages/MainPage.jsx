@@ -142,12 +142,14 @@ function MainPage() {
                     highestResumeScore={highestResumeScore}
                     totalApplications={totalApplications}
                     hitBackRatio={hitBackRatio}
+                    loaded={dataLoaded}
                 />
                 <PastXDaysChart
                     id="main-page-past-7-days-chart"
                     title={"Past 7 Days Applications Count"}
                     data={past7DaysData}
                     xValues={xValues}
+                    loaded={dataLoaded}
                 />
                 <div
                     style={{
@@ -160,6 +162,7 @@ function MainPage() {
                     <PieChart
                         title={"Application by Status"}
                         data={statusCount}
+                        loaded={dataLoaded}
                     />
                     <RecentAppTable
                         data={latest5Applications}

@@ -4,6 +4,7 @@ import Sidebar from "../sections/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import StandardButton from "../components/buttons/StandardButton";
 import UpdateApplicationStatusPageController from "../controller/UpdateApplicationStatusPageController";
+import { ClipLoader } from "react-spinners";
 
 export default function UpdateApplicationStatusPage() {
     const userId = useSelector((state) => state.userId);
@@ -12,6 +13,7 @@ export default function UpdateApplicationStatusPage() {
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [updatedStatus, setUpdatedStatus] = useState(null);
     const [updated, setUpdated] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
 
     const applicationPageController = new ApplicationPageController();
     const updateApplicationStatusPageCpntroller =
@@ -19,12 +21,14 @@ export default function UpdateApplicationStatusPage() {
 
     useEffect(() => {
         const fetchApplications = async () => {
+            setDataLoaded(false);
             const applications =
                 await applicationPageController.getApplications(
                     userId,
                     accessToken
                 );
             setApplications(applications);
+            setDataLoaded(true);
         };
 
         fetchApplications();
@@ -69,38 +73,41 @@ export default function UpdateApplicationStatusPage() {
                             marginTop: "1.5rem",
                         }}
                     >
-                        <select
-                            style={{
-                                cursor: "pointer",
-                                backgroundColor: "transparent",
-                                color: "white",
-                                font: "400 1.2rem Inter",
-                                border: "1px solid #ba9ffb",
-                                borderRadius: "5px",
-                                padding: "1rem 1.5rem",
-                                width: "100%",
-                            }}
-                            defaultValue={"Select Application"}
-                            onChange={(e) => {
-                                if (e.target.value === "default") {
-                                    setSelectedApplication(null);
-                                    return;
-                                }
-                                setSelectedApplication(e.target.value);
-                            }}
-                        >
-                            <option key={"default"} value={"default"}>
-                                Select Application
-                            </option>
-                            {applications.map((app) => {
-                                return (
-                                    <option key={app.id} value={app.id}>
-                                        ID {app.id}: {app.jobTitle} (
-                                        {app.companyName})
-                                    </option>
-                                );
-                            })}
-                        </select>
+                        {!dataLoaded && <ClipLoader color="white" size={10} />}
+                        {dataLoaded && (
+                            <select
+                                style={{
+                                    cursor: "pointer",
+                                    backgroundColor: "transparent",
+                                    color: "white",
+                                    font: "400 1.2rem Inter",
+                                    border: "1px solid #ba9ffb",
+                                    borderRadius: "5px",
+                                    padding: "1rem 1.5rem",
+                                    width: "100%",
+                                }}
+                                defaultValue={"Select Application"}
+                                onChange={(e) => {
+                                    if (e.target.value === "default") {
+                                        setSelectedApplication(null);
+                                        return;
+                                    }
+                                    setSelectedApplication(e.target.value);
+                                }}
+                            >
+                                <option key={"default"} value={"default"}>
+                                    Select Application
+                                </option>
+                                {applications.map((app) => {
+                                    return (
+                                        <option key={app.id} value={app.id}>
+                                            ID {app.id}: {app.jobTitle} (
+                                            {app.companyName})
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        )}
                     </div>
                     {selectedApplication && (
                         <div

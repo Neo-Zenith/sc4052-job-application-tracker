@@ -214,7 +214,7 @@ function UploadResumePage() {
                                         })}
                                     </select>
                                     {selectedApplication && jobDescription && (
-                                        <div style={{ marginTop: "1rem" }}>
+                                        <div style={{ marginTop: "2rem" }}>
                                             <textarea
                                                 className="resume-page-textarea"
                                                 placeholder="Enter the job description here:"
@@ -229,7 +229,15 @@ function UploadResumePage() {
                                 <div style={{ marginLeft: "auto" }}>
                                     <StandardButton
                                         onClick={handleSubmit}
-                                        display={<span>Submit</span>}
+                                        display={
+                                            <span
+                                                style={{
+                                                    font: "400 1.4rem Inter",
+                                                }}
+                                            >
+                                                Submit
+                                            </span>
+                                        }
                                         useLoader={true}
                                         loaderEnd={false}
                                     />

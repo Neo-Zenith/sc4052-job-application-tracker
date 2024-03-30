@@ -8,14 +8,16 @@ function OverviewCards({
     totalApplications,
     highestResumeScore,
     hitBackRatio,
+    loaded
 }) {
     return (
         <>
             <div className="overview__cards">
                 <StandardCard
                     title={"Applications Submitted"}
-                    subtitle={totalApplications ? totalApplications : 0}
+                    subtitle={totalApplications}
                     icon={<ArticleIcon />}
+                    loaded={loaded}
                 />
                 <StandardCard
                     title={"Latest Resume Score"}
@@ -23,11 +25,13 @@ function OverviewCards({
                         highestResumeScore ? highestResumeScore + "%" : "NA"
                     }
                     icon={<PercentIcon />}
+                    loaded={loaded}
                 />
                 <StandardCard
                     title={"Hit back Ratio"}
                     subtitle={hitBackRatio ? hitBackRatio + "%" : "NA"}
                     icon={<StarIcon />}
+                    loaded={loaded}
                 />
             </div>
         </>

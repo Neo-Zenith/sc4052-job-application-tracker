@@ -9,6 +9,7 @@ export default function ResumeListPage() {
     const userId = useSelector((state) => state.userId);
     const accessToken = useSelector((state) => state.accessToken);
     const [resumes, setResumes] = useState([]);
+    const [dataLoaded, setDataLoaded] = useState(false);
     const resumeListPageController = new ResumeListPageController();
 
     const headers = [
@@ -51,6 +52,7 @@ export default function ResumeListPage() {
 
     useEffect(() => {
         const getResumes = async () => {
+            setDataLoaded(false);
             const resumes = await resumeListPageController.getResumes(
                 userId,
                 accessToken
@@ -67,7 +69,11 @@ export default function ResumeListPage() {
                         }}
                     >
                         <StandardButton
-                            display="View"
+                            display={
+                                <span style={{ font: "500 1.4rem Inter" }}>
+                                    View
+                                </span>
+                            }
                             onClick={() =>
                                 (window.location.href = "/resume/" + resume.id)
                             }
@@ -76,6 +82,7 @@ export default function ResumeListPage() {
                 );
             }
             setResumes(resumes);
+            setDataLoaded(true);
         };
         getResumes();
     }, []);
@@ -116,6 +123,7 @@ export default function ResumeListPage() {
                         ]}
                         onFilter={() => {}}
                         onResetFilter={() => {}}
+                        loading={!dataLoaded}
                     />
                 </div>
             </div>
