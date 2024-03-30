@@ -113,7 +113,9 @@ function MainPage() {
                 },
                 resumes[0]
             );
-            setHighestResumeScore(highestResumeScore);
+            setHighestResumeScore(
+                highestResumeScore ? highestResumeScore.score : null
+            );
 
             // Calculate hit back ratio
             // Hit back ratio = (application with status not "APPLIED" or "GHOSTED" / total applications) * 100

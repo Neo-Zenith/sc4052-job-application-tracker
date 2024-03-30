@@ -41,7 +41,7 @@
     width: 100%;
 }
 
-.form-content > form {
+.form-content > div {
     display: flex;
     flex-direction: column;
     row-gap: 3rem;

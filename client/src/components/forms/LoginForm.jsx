@@ -4,11 +4,18 @@ import StandardButton from "../buttons/StandardButton";
 function LoginForm({ onSubmit }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loaded, setLoaded] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!validateInputs()) return;
-        onSubmit({ username, password });
+    const handleSubmit = () => {
+        setLoaded(false);
+        setTimeout(() => {
+            if (!validateInputs()) {
+                setLoaded(true);
+                return;
+            }
+            onSubmit({ username, password });
+            setLoaded(true);
+        }, 1000);
     };
 
     const handleLabelState = (e) => {
@@ -51,7 +58,7 @@ function LoginForm({ onSubmit }) {
                     </span>
                 </div>
                 <div className="form-content">
-                    <form>
+                    <div>
                         <div className="form-group">
                             <input
                                 type="text"
@@ -89,8 +96,10 @@ function LoginForm({ onSubmit }) {
                             display={
                                 <span className="form-btn-label">Login</span>
                             }
+                            useLoader={true}
+                            loaderEnd={loaded}
                         />
-                    </form>
+                    </div>
                 </div>
             </div>
         </>

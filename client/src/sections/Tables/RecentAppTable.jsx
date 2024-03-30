@@ -4,7 +4,6 @@ import "./Table.css";
 
 function RecentAppTable({ data, dataLoaded }) {
     const [applications, setApplications] = useState(data);
-
     useEffect(() => {
         setApplications(
             data.map((application) => {

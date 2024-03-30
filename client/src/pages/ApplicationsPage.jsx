@@ -84,7 +84,11 @@ function ApplicationsPage() {
                             application.status.slice(1).toLowerCase(),
                         applicationUrl: (
                             <StandardButton
-                                display="View"
+                                display={
+                                    <span style={{ font: "500 1.4rem Inter" }}>
+                                        View
+                                    </span>
+                                }
                                 onClick={() =>
                                     window.open(
                                         application.applicationUrl,
@@ -110,7 +114,11 @@ function ApplicationsPage() {
                             application.status.slice(1).toLowerCase(),
                         applicationUrl: (
                             <StandardButton
-                                display="View"
+                                display={
+                                    <span style={{ font: "500 1.4rem Inter" }}>
+                                        View
+                                    </span>
+                                }
                                 onClick={() =>
                                     window.open(
                                         application.applicationUrl,

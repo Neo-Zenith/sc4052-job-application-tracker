@@ -3,15 +3,22 @@ import "./Form.css";
 import StandardButton from "../buttons/StandardButton";
 
 function SignupForm({ onSubmit }) {
+    const [loaded, setLoaded] = useState(false);
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!validateInputs()) return;
-        onSubmit({ username, email, password, roles: "admin" });
+    const handleSubmit = () => {
+        setLoaded(false);
+        setTimeout(() => {
+            if (!validateInputs()) {
+                setLoaded(true);
+                return;
+            }
+            onSubmit({ username, email, password, roles: "admin" });
+            setLoaded(true);
+        }, 1000);
     };
 
     const handleLabelState = (e) => {
@@ -93,7 +100,7 @@ function SignupForm({ onSubmit }) {
                     </span>
                 </div>
                 <div className="form-content">
-                    <form>
+                    <div>
                         <div className="form-group">
                             <input
                                 type="text"
@@ -169,8 +176,10 @@ function SignupForm({ onSubmit }) {
                             display={
                                 <span className="form-btn-label">Sign Up</span>
                             }
+                            useLoader={true}
+                            loaderEnd={loaded}
                         />
-                    </form>
+                    </div>
                 </div>
             </div>
         </>

@@ -3,6 +3,7 @@ import ApplicationPageController from "../controller/ApplicationPageController";
 import Sidebar from "../sections/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import StandardButton from "../components/buttons/StandardButton";
+import UpdateApplicationStatusPageController from "../controller/UpdateApplicationStatusPageController";
 
 export default function UpdateApplicationStatusPage() {
     const userId = useSelector((state) => state.userId);
@@ -10,8 +11,11 @@ export default function UpdateApplicationStatusPage() {
     const [applications, setApplications] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [updatedStatus, setUpdatedStatus] = useState(null);
+    const [updated, setUpdated] = useState(false);
 
     const applicationPageController = new ApplicationPageController();
+    const updateApplicationStatusPageCpntroller =
+        new UpdateApplicationStatusPageController();
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -20,12 +24,25 @@ export default function UpdateApplicationStatusPage() {
                     userId,
                     accessToken
                 );
-            console.log(applications);
             setApplications(applications);
         };
 
         fetchApplications();
     }, []);
+
+    const handleUpdateStatus = async () => {
+        const updatedApp = applications.find(
+            (app) => app.id === parseInt(selectedApplication)
+        );
+
+        updatedApp.status = updatedStatus;
+        await updateApplicationStatusPageCpntroller.updateAppStatus(
+            selectedApplication,
+            accessToken,
+            updatedApp
+        );
+        setUpdated(true);
+    };
 
     return (
         <>
@@ -160,6 +177,9 @@ export default function UpdateApplicationStatusPage() {
                                         Submit
                                     </span>
                                 }
+                                onClick={handleUpdateStatus}
+                                useLoader={true}
+                                loaderEnd={updated}
                             />
                         </div>
                     )}

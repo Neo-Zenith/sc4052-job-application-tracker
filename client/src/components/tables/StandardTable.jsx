@@ -112,8 +112,14 @@ function StandardTable({
                     tableTitle={tableTitle}
                     showFilters={showFilters}
                     filters={filters}
-                    onFilter={onFilter}
-                    onResetFilter={onResetFilter}
+                    onFilter={(filter) => {
+                        setPage(0);
+                        onFilter(filter);
+                    }}
+                    onResetFilter={() => {
+                        setPage(0);
+                        return onResetFilter();
+                    }}
                 />
                 <TableContainer>
                     <Table
