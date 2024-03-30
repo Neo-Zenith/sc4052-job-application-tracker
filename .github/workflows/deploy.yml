@@ -1,0 +1,43 @@
+name: Deploy to Docker Hub Pipeline
+
+on:
+  push:
+    branches:
+      - main # Change this to your branch name if not 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "adopt"
+
+      - name: Change to server directory
+        run: cd server
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: true
+          tags: rowentey/sc4052-cloud-computing:latest # Replace with your Docker Hub username, repository, and tag
