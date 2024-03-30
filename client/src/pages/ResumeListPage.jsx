@@ -24,28 +24,28 @@ export default function ResumeListPage() {
             numeric: false,
             disablePadding: false,
             label: "File Name",
-            width: 0.3,
+            width: 0.2,
         },
         {
             id: "date",
             numeric: false,
             disablePadding: false,
             label: "Upload Date",
-            width: 0.3,
+            width: 0.2,
         },
         {
             id: "score",
             numeric: true,
             disablePadding: false,
             label: "Score",
-            width: 0.2,
+            width: 0.25,
         },
         {
             id: "action",
             numeric: true,
             disablePadding: false,
             label: "Action",
-            width: 0.1,
+            width: 0.25,
         },
     ];
 

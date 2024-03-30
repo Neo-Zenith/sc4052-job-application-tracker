@@ -40,7 +40,7 @@ function Sidebar() {
                 </div>
                 <div className="sidebar__section">
                     <span className="sidebar__section__header">Actions</span>
-                    <a className="sidebar__link" href="/">
+                    <a className="sidebar__link" href="/update-status">
                         <AutorenewIcon />
                         Update Application Status
                     </a>

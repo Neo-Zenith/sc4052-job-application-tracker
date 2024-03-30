@@ -11,6 +11,7 @@ function ApplicationsPage() {
     const accessToken = useSelector((state) => state.accessToken);
     const [data, setData] = useState([]);
     const [displayedData, setDisplayedData] = useState(data);
+    const [dataLoaded, setDataLoaded] = useState(false);
 
     const applicationPageController = new ApplicationPageController(dispatch);
 
@@ -73,7 +74,9 @@ function ApplicationsPage() {
                 ...applications.map((application) => {
                     return {
                         id: application.id,
-                        createdOn: application.createdOn,
+                        createdOn: new Date(
+                            application.createdOn
+                        ).toLocaleDateString("en-US"),
                         jobTitle: application.jobTitle,
                         companyName: application.companyName,
                         status:
@@ -97,7 +100,9 @@ function ApplicationsPage() {
                 ...applications.map((application) => {
                     return {
                         id: application.id,
-                        createdOn: application.createdOn,
+                        createdOn: new Date(
+                            application.createdOn
+                        ).toLocaleDateString("en-US"),
                         jobTitle: application.jobTitle,
                         companyName: application.companyName,
                         status:
@@ -117,6 +122,7 @@ function ApplicationsPage() {
                     };
                 }),
             ]);
+            setDataLoaded(true);
         };
         fetchData();
     }, []);
@@ -177,6 +183,7 @@ function ApplicationsPage() {
                         tableTitle={tableTitle}
                         headCells={headers}
                         data={displayedData}
+                        loading={!dataLoaded}
                     />
                 </div>
             </div>

@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableToolbar from "./TableToolbar";
 import StandardTableHead from "./TableHead";
+import { ClipLoader } from "react-spinners";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -55,6 +56,7 @@ function StandardTable({
     filters,
     onFilter,
     onResetFilter,
+    loading,
 }) {
     const [localData, setLocalData] = useState(data);
     const [order, setOrder] = useState(defaultOrder);
@@ -166,6 +168,41 @@ function StandardTable({
                             )}
                         </TableBody>
                     </Table>
+                    {visibleRows.length === 0 && !loading && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                width: "100%",
+                                marginTop: "3rem",
+                                marginBottom: "1.5rem",
+                            }}
+                        >
+                            <span
+                                style={{
+                                    font: "400 1.4rem Inter",
+                                    fontStyle: "italic",
+                                    color: "#c1bfbf",
+                                }}
+                            >
+                                No result found.
+                            </span>
+                        </div>
+                    )}
+                    {loading && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginTop: "3rem",
+                                marginBottom: "1.5rem",
+                            }}
+                        >
+                            <ClipLoader color="white" />
+                        </div>
+                    )}
                 </TableContainer>
                 {showPagination && (
                     <TablePagination

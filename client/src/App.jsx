@@ -7,8 +7,9 @@ import ApplicationsPage from "./pages/ApplicationsPage";
 import UploadResumePage from "./pages/UploadResumePage";
 import ResumeScorePage from "./pages/ResumeScorePage";
 import ResumeListPage from "./pages/ResumeListPage";
+import UpdateApplicationStatusPage from "./pages/UpdateApplicationStatusPage";
 
-export const serverUrl = "http://10.91.176.73:8080/api/v1";
+export const serverUrl = "http://172.171.242.107:8080/api/v1";
 
 function App() {
     return (
@@ -28,6 +29,10 @@ function App() {
                     />
                     <Route path="/resume/:id" element={<ResumeScorePage />} />
                     <Route path="/resumes" element={<ResumeListPage />} />
+                    <Route
+                        path="/update-status"
+                        element={<UpdateApplicationStatusPage />}
+                    />
                 </Routes>
             </Router>
             <Toaster

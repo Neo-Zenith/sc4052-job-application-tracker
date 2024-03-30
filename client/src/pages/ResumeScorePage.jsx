@@ -33,12 +33,11 @@ export default function ResumeScorePage() {
                 accessToken
             );
             setScore(resumeScore.score);
-            const modifiedFeedbacks = resumeScore.feedback
-                .split("| ")
-                .map((feedback) => {
+            setFeedbacks(
+                resumeScore.feedback.split("<>").map((feedback) => {
                     return feedback.replace("/^(s?Feedbacksds)/", "");
-                });
-            setFeedbacks(modifiedFeedbacks);
+                })
+            );
 
             if (resumeScore.applicationId) {
                 fetchJobDescription(resumeScore.applicationId);

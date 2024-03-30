@@ -14,14 +14,7 @@ function UploadResumePage() {
     const accessToken = useSelector((state) => state.accessToken);
     const [file, setFile] = useState(null);
     const [configChoice, setConfigChoice] = useState("new");
-    const [applications, setApplications] = useState([
-        {
-            id: 1,
-            title: "Software Engineer",
-            company: "Google",
-            jobDescription: "This is a job description",
-        },
-    ]);
+    const [applications, setApplications] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [jobDescription, setJobDescription] = useState("");
 
@@ -189,6 +182,7 @@ function UploadResumePage() {
                                             border: "1px solid #ba9ffb",
                                             borderRadius: "5px",
                                             padding: "1rem 1.5rem",
+                                            width: "60%",
                                         }}
                                         defaultValue={"Select Application"}
                                         onChange={(e) => {

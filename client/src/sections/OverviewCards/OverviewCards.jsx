@@ -4,23 +4,29 @@ import ArticleIcon from "@mui/icons-material/Article";
 import StarIcon from "@mui/icons-material/Star";
 import PercentIcon from "@mui/icons-material/Percent";
 
-function OverviewCards() {
+function OverviewCards({
+    totalApplications,
+    highestResumeScore,
+    hitBackRatio,
+}) {
     return (
         <>
             <div className="overview__cards">
                 <StandardCard
-                    title={"Jobs Submitted"}
-                    subtitle={"2"}
+                    title={"Applications Submitted"}
+                    subtitle={totalApplications ? totalApplications : 0}
                     icon={<ArticleIcon />}
                 />
                 <StandardCard
                     title={"Latest Resume Score"}
-                    subtitle={"98%"}
+                    subtitle={
+                        highestResumeScore ? highestResumeScore + "%" : "NA"
+                    }
                     icon={<PercentIcon />}
                 />
                 <StandardCard
                     title={"Hit back Ratio"}
-                    subtitle={"0.1"}
+                    subtitle={hitBackRatio ? hitBackRatio + "%" : "NA"}
                     icon={<StarIcon />}
                 />
             </div>

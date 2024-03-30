@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import "./Chart.css";
 
-function PastXDaysChart({ id, title, data, x }) {
+function PastXDaysChart({ id, title, data, xValues }) {
     const [series, setSeries] = useState([]);
     const [options, setOptions] = useState({
         chart: {
@@ -12,17 +12,6 @@ function PastXDaysChart({ id, title, data, x }) {
             },
         },
     });
-
-    const generatePastXDaysArray = (days) => {
-        // Generate a string array of the past X days in the format "YYYY-MM-DD"
-        let dateArray = [];
-        for (let i = days; i > 0; i--) {
-            let d = new Date();
-            d.setDate(d.getDate() - i);
-            dateArray.push(d.toISOString().split("T")[0]);
-        }
-        return dateArray;
-    };
 
     useEffect(() => {
         const updatedOptions = {
@@ -38,7 +27,7 @@ function PastXDaysChart({ id, title, data, x }) {
                 },
             },
             xaxis: {
-                categories: generatePastXDaysArray(x),
+                categories: xValues,
                 labels: {
                     style: {
                         colors: "#ffffff",
@@ -51,11 +40,12 @@ function PastXDaysChart({ id, title, data, x }) {
                         colors: "#ffffff",
                     },
                 },
+                min: 0,
             },
         };
         setOptions(updatedOptions);
         setSeries(data);
-    }, [data, x]);
+    }, [data, xValues]);
 
     return (
         <>
