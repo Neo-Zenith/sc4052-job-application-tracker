@@ -3,15 +3,62 @@ import StandardTable from "../components/tables/StandardTable";
 import ResumeListPageController from "../controller/ResumeListPageController";
 import Sidebar from "../sections/Sidebar/Sidebar";
 import StandardButton from "../components/buttons/StandardButton";
+import { useSelector } from "react-redux";
 
 export default function ResumeListPage() {
+    const userId = useSelector((state) => state.userId);
+    const accessToken = useSelector((state) => state.accessToken);
     const [resumes, setResumes] = useState([]);
     const resumeListPageController = new ResumeListPageController();
 
+    const headers = [
+        {
+            id: "id",
+            numeric: true,
+            disablePadding: false,
+            label: "ID",
+            width: 0.1,
+        },
+        {
+            id: "fileName",
+            numeric: false,
+            disablePadding: false,
+            label: "File Name",
+            width: 0.3,
+        },
+        {
+            id: "date",
+            numeric: false,
+            disablePadding: false,
+            label: "Upload Date",
+            width: 0.3,
+        },
+        {
+            id: "score",
+            numeric: true,
+            disablePadding: false,
+            label: "Score",
+            width: 0.2,
+        },
+        {
+            id: "action",
+            numeric: true,
+            disablePadding: false,
+            label: "Action",
+            width: 0.1,
+        },
+    ];
+
     useEffect(() => {
         const getResumes = async () => {
-            const resumes = await resumeListPageController.getResumes();
+            const resumes = await resumeListPageController.getResumes(
+                userId,
+                accessToken
+            );
             for (let resume of resumes) {
+                resume.date = new Date(resume.createdOn).toLocaleDateString(
+                    "en-US"
+                );
                 resume.action = (
                     <div
                         style={{
@@ -47,44 +94,7 @@ export default function ResumeListPage() {
                 >
                     <StandardTable
                         data={resumes}
-                        headCells={[
-                            {
-                                id: "id",
-                                numeric: true,
-                                disablePadding: false,
-                                label: "ID",
-                            },
-                            {
-                                id: "fileName",
-                                numeric: false,
-                                disablePadding: false,
-                                label: "File Name",
-                            },
-                            {
-                                id: "jobTitle",
-                                numeric: false,
-                                disablePadding: false,
-                                label: "Job Title",
-                            },
-                            {
-                                id: "date",
-                                numeric: false,
-                                disablePadding: false,
-                                label: "Upload Date",
-                            },
-                            {
-                                id: "score",
-                                numeric: true,
-                                disablePadding: false,
-                                label: "Score",
-                            },
-                            {
-                                id: "action",
-                                numeric: true,
-                                disablePadding: false,
-                                label: "Action",
-                            },
-                        ]}
+                        headCells={headers}
                         showFilters={true}
                         showPagination={true}
                         showActions={true}

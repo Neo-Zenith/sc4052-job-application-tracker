@@ -4,8 +4,14 @@ import StandardButton from "../components/buttons/StandardButton";
 import { useEffect, useState } from "react";
 import Selection from "../sections/Selection/Selection";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import UploadResumePageController from "../controller/UploadResumePageController";
+import { useDispatch, useSelector } from "react-redux";
+import ApplicationPageController from "../controller/ApplicationPageController";
 
-function ResumePage() {
+function UploadResumePage() {
+    const dispatch = useDispatch();
+    const userId = useSelector((state) => state.userId);
+    const accessToken = useSelector((state) => state.accessToken);
     const [file, setFile] = useState(null);
     const [configChoice, setConfigChoice] = useState("new");
     const [applications, setApplications] = useState([
@@ -18,6 +24,51 @@ function ResumePage() {
     ]);
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [jobDescription, setJobDescription] = useState("");
+
+    const uploadResumePageController = new UploadResumePageController(dispatch);
+    const applicationPageController = new ApplicationPageController(dispatch);
+
+    const handleSubmitResume = async () => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await uploadResumePageController.uploadResume(
+                formData,
+                accessToken
+            );
+            return response;
+        } catch (error) {
+            console.error("Error uploading resume:", error);
+        }
+    };
+
+    const handleReqForFeedback = async (resumeId) => {
+        const payload = {
+            resumeInfoId: resumeId,
+            jobDescription: jobDescription ? jobDescription : undefined,
+            applicationId: selectedApplication
+                ? parseInt(selectedApplication)
+                : undefined,
+        };
+
+        try {
+            const response = await uploadResumePageController.requestFeedback(
+                payload,
+                accessToken
+            );
+            return response;
+        } catch (error) {
+            console.error("Error requesting feedback:", error);
+        }
+    };
+
+    const handleSubmit = async () => {
+        const response = await handleSubmitResume();
+        if (response) {
+            await handleReqForFeedback(response.data.id);
+        }
+    };
 
     useEffect(() => {
         setSelectedApplication(null);
@@ -34,6 +85,28 @@ function ResumePage() {
         const updatedJD = targetApp.jobDescription;
         setJobDescription(updatedJD);
     }, [selectedApplication]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await applicationPageController.getApplications(
+                userId,
+                accessToken
+            );
+            setApplications(
+                data.map((app) => {
+                    return {
+                        id: app.id,
+                        title: app.jobTitle,
+                        company: app.companyName,
+                        jobDescription: app.jobDescription,
+                    };
+                })
+            );
+        };
+        if (configChoice === "existing") {
+            fetchData();
+        }
+    }, [configChoice]);
 
     return (
         <>
@@ -161,7 +234,10 @@ function ResumePage() {
                             {file && jobDescription && (
                                 <div style={{ marginLeft: "auto" }}>
                                     <StandardButton
+                                        onClick={handleSubmit}
                                         display={<span>Submit</span>}
+                                        useLoader={true}
+                                        loaderEnd={false}
                                     />
                                 </div>
                             )}
@@ -173,4 +249,4 @@ function ResumePage() {
     );
 }
 
-export default ResumePage;
+export default UploadResumePage;

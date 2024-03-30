@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -56,10 +56,11 @@ function StandardTable({
     onFilter,
     onResetFilter,
 }) {
-    const [order, setOrder] = React.useState(defaultOrder);
-    const [orderBy, setOrderBy] = React.useState(defaultOrderBy);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [localData, setLocalData] = useState(data);
+    const [order, setOrder] = useState(defaultOrder);
+    const [orderBy, setOrderBy] = useState(defaultOrderBy);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -78,16 +79,20 @@ function StandardTable({
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - localData.length) : 0;
 
-    const visibleRows = React.useMemo(
+    const visibleRows = useMemo(
         () =>
-            stableSort(data, getComparator(order, orderBy)).slice(
+            stableSort(localData, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
             ),
-        [data, order, orderBy, page, rowsPerPage]
+        [localData, order, orderBy, page, rowsPerPage]
     );
+
+    useEffect(() => {
+        setLocalData(data);
+    }, [data]);
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -134,6 +139,7 @@ function StandardTable({
                                                             ? "right"
                                                             : "left"
                                                     }
+                                                    sx={{ width: cell.width }}
                                                 >
                                                     <span
                                                         style={{

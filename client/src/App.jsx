@@ -4,9 +4,11 @@ import MainPage from "./pages/MainPage";
 import SignupPage from "./pages/SignupPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ApplicationsPage from "./pages/ApplicationsPage";
-import ResumePage from "./pages/ResumePage";
+import UploadResumePage from "./pages/UploadResumePage";
 import ResumeScorePage from "./pages/ResumeScorePage";
 import ResumeListPage from "./pages/ResumeListPage";
+
+export const serverUrl = "http://10.91.176.73:8080/api/v1";
 
 function App() {
     return (
@@ -20,7 +22,10 @@ function App() {
                         path="/applications"
                         element={<ApplicationsPage />}
                     />
-                    <Route path="/upload-resume" element={<ResumePage />} />
+                    <Route
+                        path="/upload-resume"
+                        element={<UploadResumePage />}
+                    />
                     <Route path="/resume/:id" element={<ResumeScorePage />} />
                     <Route path="/resumes" element={<ResumeListPage />} />
                 </Routes>
