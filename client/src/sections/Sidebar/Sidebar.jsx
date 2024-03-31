@@ -8,6 +8,7 @@ import AuthPageController from "../../controller/AuthPageController";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import StandardButton from "../../components/buttons/StandardButton";
+import fullLogo from "../../img/full_logo.png";
 
 function Sidebar() {
     const dispatch = useDispatch();
@@ -19,8 +20,29 @@ function Sidebar() {
 
     return (
         <div className="sidebar">
+            <div
+                style={{
+                    display: "flex",
+                    height: "8rem",
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "3rem",
+                    marginBottom: "1rem",
+                }}
+            >
+                <img
+                    src={fullLogo}
+                    alt="logo"
+                    style={{
+                        objectFit: "contain",
+                        width: "100%",
+                        height: "100%",
+                    }}
+                />
+            </div>
             <div className="sidebar__title">
-                <span>Dashboard</span>
+                <span>DASHBOARD</span>
             </div>
             <div className="sidebar__menu">
                 <a className="sidebar__link home__link" href="/">

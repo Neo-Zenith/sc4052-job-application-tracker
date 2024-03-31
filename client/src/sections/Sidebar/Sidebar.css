@@ -17,8 +17,9 @@
 
 .sidebar__title {
     padding: 4rem 2rem 0 2rem;
-    font: 500 2rem 'Inter';
-    color: white;
+    font: 600 2rem 'Inter';
+    letter-spacing: 0.1rem;
+    color: #9a94eb;
 }
 
 .sidebar__menu {
