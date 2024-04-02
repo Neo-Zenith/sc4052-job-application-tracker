@@ -21,7 +21,7 @@ public enum JobType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static JobType fromString(String type) {
         for (JobType jobType : JobType.values()) {
-            // Replace underscore with hyphen
+            // Replace underscore with hyphen for serialization
             if (jobType.getType().equalsIgnoreCase(type.replace("_", "-"))) {
                 return jobType;
             }

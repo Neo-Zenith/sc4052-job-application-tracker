@@ -18,6 +18,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("api/v1/applications")
+@EnableCaching
 public class ApplicationController {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
@@ -43,6 +49,9 @@ public class ApplicationController {
 
     @Autowired
     private JwtTokenService jwtTokenService;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @ExceptionHandler({ UserNotFoundException.class, ApplicationNotFoundException.class })
     public ResponseEntity<Object> handleResourceNotFoundException(Exception ex) {
@@ -57,6 +66,7 @@ public class ApplicationController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Application.class)) })
     })
     @GetMapping
+    @Cacheable(value = "applications", key = "#userId")
     public List<Application> getApplications(
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "status", required = false) String status) throws UserNotFoundException {
@@ -129,6 +139,12 @@ public class ApplicationController {
         application.setLastUpdated(LocalDateTime.now());
         logger.info("Filled in missing attributes!");
 
+        // Evict the cache
+        Cache applicationsCache = cacheManager.getCache("applications");
+        if (applicationsCache != null) {
+            applicationsCache.evict(userId);
+        }
+
         Application newApplication = applicationService.createApplication(application);
         CreateApplicationResponse response = new CreateApplicationResponse("Application created successfully.",
                 newApplication);
@@ -144,6 +160,14 @@ public class ApplicationController {
     @PutMapping("/{id}")
     public ResponseEntity<Application> updateApplication(@PathVariable("id") Long id,
             @RequestBody Application application) throws ApplicationNotFoundException {
+        Long userId = jwtTokenService.extractUserId();
+
+        // Evict the cache
+        Cache applicationsCache = cacheManager.getCache("applications");
+        if (applicationsCache != null) {
+            applicationsCache.evict(userId);
+        }
+
         application.setLastUpdated(LocalDateTime.now());
         Application updatedApplication = applicationService.updateApplication(application);
         return ResponseEntity.ok(updatedApplication);
@@ -155,6 +179,14 @@ public class ApplicationController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteApplication(@PathVariable Long id) {
+        Long userId = jwtTokenService.extractUserId();
+
+        // Evict the cache
+        Cache applicationsCache = cacheManager.getCache("applications");
+        if (applicationsCache != null) {
+            applicationsCache.evict(userId);
+        }
+
         applicationService.deleteApplication(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
