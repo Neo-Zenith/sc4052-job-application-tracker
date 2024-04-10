@@ -2,6 +2,7 @@ package com.example.applicationtrackerserver.repository;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.applicationtrackerserver.enums.ApplicationStatus;
 import com.example.applicationtrackerserver.models.Application;
 import com.example.applicationtrackerserver.models.User;
 
@@ -18,9 +19,9 @@ import java.time.LocalDateTime;
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     List<Application> findByUser(User user);
 
-    List<Application> findByStatus(String status);
+    List<Application> findByStatus(ApplicationStatus status);
 
-    List<Application> findByUserAndStatus(User user, String status);
+    List<Application> findByUserAndStatus(User user, ApplicationStatus status);
 
     public interface DateCount {
         LocalDate getDate();

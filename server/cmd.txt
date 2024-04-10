@@ -1,1 +1,17 @@
 ssh -i "SC4052CloudComputing_key.pem" sc4052-admin@172.171.242.107
+
+docker run -d -p 8080:8080 -e GEMINI_API_KEY=AIzaSyB_TfCr6Hw-EuF_26H_hBqSkOet-nsMz1o <image-name>
+
+mvn test -D GEMINI_API_KEY=AIzaSyB_TfCr6Hw-EuF_26H_hBqSkOet-nsMz1o -D test=ApplicationControllerIntegrationTest
+
+mvn clean test -D GEMINI_API_KEY=AIzaSyB_TfCr6Hw-EuF_26H_hBqSkOet-nsMz1o -D JWT_SECRET=SC4052_CLOUD_COMPUTING
+
+mvn clean install -D DB_URL=jdbc:postgresql://sc4052.postgres.database.azure.com:5432/postgres -D DB_USERNAME=jatadmin -D DB_PASSWORD=sc4052Cloudcomputing -D GEMINI_API_KEY=AIzaSyB_TfCr6Hw-EuF_26H_hBqSkOet-nsMz1o -D JWT_SECRET=SC4052_CLOUD_COMPUTING 
+
+set DB_URL=jdbc:postgresql://sc4052.postgres.database.azure.com:5432/postgres
+set DB_USERNAME=jatadmin
+set DB_PASSWORD=sc4052Cloudcomputing
+set GEMINI_API_KEY=AIzaSyB_TfCr6Hw-EuF_26H_hBqSkOet-nsMz1o
+set JWT_SECRET=SC4052_CLOUD_COMPUTING
+
+java -jar <build-name>
