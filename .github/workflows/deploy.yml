@@ -3,7 +3,7 @@ name: Deploy to Docker Hub Pipeline
 on:
   push:
     branches:
-      - main # Change this to your branch name if not 'main'
+      - master # Change this to your branch name if not 'main'
 
 jobs:
   build:
