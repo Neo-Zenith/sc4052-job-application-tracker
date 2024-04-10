@@ -1,16 +1,26 @@
-(() => {
+let isLoggedIn = false;
+
+(async () => {
 	console.log("[Extension] LinkedIn Job Saver is active!");
-	displayToast("LinkedIn Job Saver is active!");
+
+	getToken()
+		.then(() => {
+			displayToast("LinkedIn Job Saver is active!");
+			isLoggedIn = true;
+		})
+		.catch(() => {
+			displayToast("Please login to save jobs!");
+		});
 })();
 
 document.addEventListener("click", async function (event) {
 	console.log("[Extension] Clicked", isApply(event));
-	if (isApply(event)) {
+	if (isLoggedIn && isApply(event)) {
 		console.log("[Extension] Clicked on apply button!");
 		const jobDetails = await extractJobDetails();
 		const payload = {
 			...jobDetails,
-			status: "Viewed",
+			status: "Applied",
 			source: "LinkedIn",
 		};
 
@@ -24,27 +34,43 @@ document.addEventListener("click", async function (event) {
 					displayToast("Job application saved!");
 				} else {
 					console.log("[Extension] Failed to save job");
-				}
-			}
-		);
-	} else if (isSubmitApplication(event)) {
-		payload = { status: "Applied" };
-		console.log("[Extension] Updating job...");
-		chrome.runtime.sendMessage(
-			{ type: "UPDATE_JOB", payload: payload },
-			function (response) {
-				if (response.success) {
-					console.log("[Extension] Job updated successfully");
-					displayToast("Job application updated!");
-				} else {
-					console.log("[Extension] Failed to update job");
+					displayToast("Failed to save job!", "red");
 				}
 			}
 		);
 	}
+	// else if (isSubmitApplication(event)) {
+	// 	payload = { status: "Applied" };
+	// 	console.log("[Extension] Updating job...");
+	// 	chrome.runtime.sendMessage(
+	// 		{ type: "UPDATE_JOB", payload: payload },
+	// 		function (response) {
+	// 			if (response.success) {
+	// 				console.log("[Extension] Job updated successfully");
+	// 				displayToast("Job application updated!");
+	// 			} else {
+	// 				console.log("[Extension] Failed to update job");
+	// 			}
+	// 		}
+	// 	);
+	// }
 });
 
-function displayToast(message) {
+async function getToken() {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get("jwtToken", (result) => {
+			const token = result.jwtToken;
+
+			if (token) {
+				resolve(token);
+			} else {
+				reject("No token found");
+			}
+		});
+	});
+}
+
+function displayToast(message, color = "rgba(0, 86, 179, 0.7)") {
 	const modalDiv = document.createElement("div");
 	modalDiv.style.position = "fixed";
 	modalDiv.style.top = "5%";
@@ -52,7 +78,7 @@ function displayToast(message) {
 	modalDiv.style.transform = "translate(-50%, -50%)";
 	modalDiv.style.width = "fit-content";
 	modalDiv.style.height = "50px";
-	modalDiv.style.backgroundColor = "rgba(0, 86, 179, 0.7";
+	modalDiv.style.backgroundColor = color;
 	modalDiv.style.display = "flex";
 	modalDiv.style.justifyContent = "center";
 	modalDiv.style.alignItems = "center";
@@ -107,10 +133,12 @@ function isSubmitApplication(event) {
 // Extract job details from the page
 async function extractJobDetails() {
 	// Job details
-	const jobTitleSpanElement = document.querySelector(
-		".job-details-jobs-unified-top-card__job-title-link"
+	const jobTitleH2Element = document.querySelector(
+		".job-details-jobs-unified-top-card__job-title"
 	);
-	const jobTitleAnchorElement = jobTitleSpanElement.parentNode;
+	const jobTitleAnchorElement = jobTitleH2Element.querySelector("a");
+	const jobTitleSpanElement = jobTitleH2Element.querySelector("span");
+
 	const jobTitle = jobTitleSpanElement.innerText;
 	const applicationUrl = jobTitleAnchorElement.href;
 

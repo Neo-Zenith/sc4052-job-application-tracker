@@ -11,12 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			const payload = JSON.parse(atob(token.split(".")[1]));
 			console.log("payload:", payload);
 
-			return fetch("http://172.171.242.107:8080/api/v1/applications", {
-				params: { userId: payload.userId },
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
+			return fetch(
+				`http://172.171.242.107:8080/api/v1/applications?userId=${payload.userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 		})
 		.then((response) => response.json())
 		.then((applications) => {

@@ -171,9 +171,10 @@ function createUpdateBtn(parentElement, formContainer, application) {
 				submitButton.classList.remove("loading");
 				submitButton.innerText = "Update";
 				submitButton.disabled = false;
-				setTimeout(() => {
-					window.open("../templates/popup.html", "_self");
-				}, 1000);
+				displayToast("Application updated successfully");
+				// setTimeout(() => {
+				// 	window.open("../templates/popup.html", "_self");
+				// }, 1000);
 			})
 			.catch((error) => {
 				submitButton.classList.remove("loading");
@@ -261,4 +262,44 @@ function base64Decode(base64) {
 	}
 	let decoder = new TextDecoder();
 	return decoder.decode(data);
+}
+
+function displayToast(message) {
+	const modalDiv = document.createElement("div");
+	modalDiv.style.position = "fixed";
+	modalDiv.style.top = "7.5%";
+	modalDiv.style.left = "50%";
+	modalDiv.style.transform = "translate(-50%, -50%)";
+	modalDiv.style.width = "fit-content";
+	modalDiv.style.height = "40px";
+	modalDiv.style.backgroundColor = "rgba(0, 86, 179, 0.7)";
+	modalDiv.style.display = "flex";
+	modalDiv.style.justifyContent = "center";
+	modalDiv.style.alignItems = "center";
+	modalDiv.style.zIndex = "2147483647";
+	modalDiv.style.padding = "5px";
+	modalDiv.style.borderRadius = "25px";
+	modalDiv.style.boxShadow = "0 0 5px rgba(0, 0, 0, 0.2)";
+	modalDiv.style.transition = "opacity 0.5s ease";
+	modalDiv.style.opacity = "0";
+
+	const modalText = document.createElement("p");
+	modalText.innerText = message;
+	modalText.style.color = "#f2f2f2";
+	modalText.style.fontWeight = "bold";
+	modalText.style.fontSize = "14px";
+	modalDiv.append(modalText);
+
+	document.body.prepend(modalDiv);
+
+	// Fade in animation
+	setTimeout(() => {
+		modalDiv.style.opacity = "1";
+	}, 100);
+
+	// Fade out animation after 3 seconds
+	setTimeout(() => {
+		modalDiv.style.opacity = "0";
+		modalDiv.remove();
+	}, 3000);
 }
