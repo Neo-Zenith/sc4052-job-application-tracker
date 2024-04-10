@@ -11,7 +11,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -19,10 +21,8 @@ jobs:
           java-version: "17"
           distribution: "adopt"
 
-      - name: Change to server directory
-        run: cd server
-
       - name: Build with Maven
+        working-directory: "./server"
         run: mvn clean install
 
       - name: Set up Docker Buildx
@@ -37,6 +37,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
+          working-directory: "./server"
           context: .
           dockerfile: Dockerfile
           push: true
