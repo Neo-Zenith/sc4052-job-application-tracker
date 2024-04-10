@@ -3,6 +3,8 @@ target/
 resumes/
 resume.*
 *.pem
+*.env
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
