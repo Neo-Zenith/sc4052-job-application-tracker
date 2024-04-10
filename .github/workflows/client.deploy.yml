@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master # Change this to your branch name if not 'main'
+    paths:
+      - 'client/**'
 
 jobs:
   build:

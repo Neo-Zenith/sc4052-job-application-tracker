@@ -9,7 +9,7 @@ import ResumeScorePage from "./pages/ResumeScorePage";
 import ResumeListPage from "./pages/ResumeListPage";
 import UpdateApplicationStatusPage from "./pages/UpdateApplicationStatusPage";
 
-export const serverUrl = "http://172.171.242.107:8080/api/v1";
+export const serverUrl = "http://172.171.242.107:80/api/v1";
 
 function App() {
     return (
