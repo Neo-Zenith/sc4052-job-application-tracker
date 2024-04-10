@@ -119,6 +119,7 @@ function createForm(application) {
 
 	const actionBtnDiv = document.getElementById("actionBtns");
 	createUpdateBtn(actionBtnDiv, formContainer, application);
+	createDeleteBtn(actionBtnDiv, application);
 }
 
 function createUpdateBtn(parentElement, formContainer, application) {
@@ -180,6 +181,48 @@ function createUpdateBtn(parentElement, formContainer, application) {
 				submitButton.classList.remove("loading");
 				submitButton.innerText = "Update";
 				submitButton.disabled = false;
+				console.error("Error:", error);
+			});
+	});
+}
+
+function createDeleteBtn(parentElement, application) {
+	const deleteBtn = document.createElement("button");
+	deleteBtn.classList.add("delete");
+	deleteBtn.textContent = "Delete";
+	parentElement.appendChild(deleteBtn);
+
+	deleteBtn.addEventListener("click", function () {
+		deleteBtn.classList.add("loading");
+		deleteBtn.innerText = "";
+		deleteBtn.disabled = true;
+
+		getToken()
+			.then((token) => {
+				return fetch(
+					`http://172.171.242.107:8080/api/v1/applications/${application.id}`,
+					{
+						method: "DELETE",
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+			})
+			.then((data) => {
+				console.log("Success:", data);
+				deleteBtn.classList.remove("loading");
+				deleteBtn.innerText = "Delete";
+				deleteBtn.disabled = false;
+				displayToast("Application deleted successfully");
+				// setTimeout(() => {
+				// 	window.open("../templates/popup.html", "_self");
+				// }, 1000);
+			})
+			.catch((error) => {
+				deleteBtn.classList.remove("loading");
+				deleteBtn.innerText = "Delete";
+				deleteBtn.disabled = false;
 				console.error("Error:", error);
 			});
 	});
