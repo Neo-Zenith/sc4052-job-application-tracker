@@ -1,0 +1,11 @@
+.overview__cards {
+    margin: 0 3rem;
+    margin-top: 4rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    align-items: space-around;
+}

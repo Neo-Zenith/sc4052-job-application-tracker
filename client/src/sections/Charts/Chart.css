@@ -1,0 +1,25 @@
+.chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 2rem;
+    background-color: var(--color-surface-200);
+    border-radius: 1.5rem;
+}
+
+.chart-title {
+    font: 500 2rem 'Inter';
+    color: white;
+    padding-bottom: 2rem;
+}
+
+.main-page-chart {
+    margin: 5rem auto 0;
+    width: 90%;
+}
+
+.app-status-chart {
+    width: 30%;
+    margin-right: auto;
+    margin-left: 0rem;
+}

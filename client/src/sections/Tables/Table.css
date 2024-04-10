@@ -1,0 +1,15 @@
+.recent-app-table {
+    width: 60%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.recent-app-table-title {
+    font: 500 2rem 'Inter';
+    color: white;
+    padding-bottom: 2rem;
+    margin-left: -2rem;
+    margin-top: -1rem;
+}
