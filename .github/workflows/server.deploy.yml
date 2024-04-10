@@ -37,8 +37,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          working-directory: "./server"
-          context: .
+          context: "./server"
           dockerfile: Dockerfile
           push: true
           tags: neozenith1501/jobwise:server-latest 
