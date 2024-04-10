@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Job Application Tracker",
+  "version": "1.0",
+  "description": "This extension will help you track your job applications on LinkedIn.",
+  "permissions": ["activeTab", "alarms", "storage", "notifications"],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/jobs/*"],
+      "js": ["js/content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "templates/popup.html"
+  }
+}

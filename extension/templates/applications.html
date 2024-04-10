@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.applications-label {
+				margin: 0 auto 15px;
+			}
+
+			.card {
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				padding: 10px;
+				margin-bottom: 10px;
+				cursor: pointer;
+				overflow-wrap: break-word;
+			}
+
+			#cardsContainer {
+				width: 300px;
+				max-height: 75%;
+				overflow-y: scroll;
+				padding-right: 5px;
+			}
+		</style>
+		<link rel="stylesheet" href="../css/index.css" />
+		<script defer src="../js/applications.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Applications</h1>
+
+			<p class="applications-label"></p>
+
+			<div class="loading" style="display: none"></div>
+
+			<div id="cardsContainer"></div>
+
+			<div id="actionBtns">
+				<button id="backBtn">Back</button>
+			</div>
+		</div>
+	</body>
+</html>
