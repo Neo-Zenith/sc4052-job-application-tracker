@@ -1,4 +1,4 @@
-name: Deploy to Docker Hub Pipeline
+name: Deploy Server to Docker Hub Pipeline
 
 on:
   push:
@@ -40,4 +40,4 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: rowentey/sc4052-cloud-computing:latest # Replace with your Docker Hub username, repository, and tag
+          tags: neozenith1501/jobwise:server-latest 

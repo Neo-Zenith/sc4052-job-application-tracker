@@ -1,0 +1,45 @@
+name: Deploy Client to Docker Hub Pipeline
+
+on:
+  push:
+    branches:
+      - master # Change this to your branch name if not 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+      
+        - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: "20"
+      
+        - name: Change to client directory
+          run: cd client
+      
+        - name: Install dependencies
+          run: npm install
+      
+        - name: Build React client
+          run: npm run build
+      
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v1
+      
+        - name: Login to DockerHub
+          uses: docker/login-action@v1
+          with:
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      
+        - name: Build and push Docker image
+          uses: docker/build-push-action@v2
+          with:
+            context: .
+            dockerfile: Dockerfile
+            push: true
+            tags: neozenith1501/jobwise:client-latest 
+      
