@@ -1,5 +1,6 @@
 package com.example.applicationtrackerserver.controllers;
 
+import com.example.applicationtrackerserver.enums.ApplicationStatus;
 import com.example.applicationtrackerserver.exceptions.ApplicationExceptions.ApplicationNotFoundException;
 import com.example.applicationtrackerserver.exceptions.UserExceptions.UserNotFoundException;
 import com.example.applicationtrackerserver.models.Application;
@@ -71,11 +72,11 @@ public class ApplicationController {
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "status", required = false) String status) throws UserNotFoundException {
         if (userId != null && status != null) {
-            return applicationService.getApplicationsByUserIdAndStatus(userId, status);
+            return applicationService.getApplicationsByUserIdAndStatus(userId, ApplicationStatus.fromString(status));
         } else if (userId != null) {
             return applicationService.getApplicationsByUserId(userId);
         } else if (status != null) {
-            return applicationService.getApplicationsByStatus(status);
+            return applicationService.getApplicationsByStatus(ApplicationStatus.fromString(status));
         }
         return applicationService.getAllApplications();
     }

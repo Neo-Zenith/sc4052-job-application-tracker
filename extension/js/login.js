@@ -16,7 +16,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 	btn.innerText = "";
 	btn.classList.add("loading");
 
-	fetch("http://172.171.242.107:8080/api/v1/auth/login", {
+	fetch("http://172.171.242.107:80/api/v1/auth/login", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

@@ -32,12 +32,15 @@ public class DatabaseSeeder implements CommandLineRunner {
     private ApplicationRepository applicationRepository;
 
     @Autowired
+    private ResumeInfoRepository resumeInfoRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
         boolean isEmpty = userRepository.count() == 0 &&
-                applicationRepository.count() == 0;
+                applicationRepository.count() == 0 && resumeInfoRepository.count() == 0;
         if (!isEmpty) {
             logger.info("Database already seeded. Exiting...");
             return;

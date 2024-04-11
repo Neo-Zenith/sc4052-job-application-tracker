@@ -4,6 +4,7 @@ resumes/
 resume.*
 *.pem
 *.env
+cmd.txt
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

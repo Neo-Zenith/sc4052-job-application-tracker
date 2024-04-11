@@ -156,7 +156,7 @@ function createUpdateBtn(parentElement, formContainer, application) {
 		getToken()
 			.then((token) => {
 				return fetch(
-					`http://172.171.242.107:8080/api/v1/applications/${application.id}`,
+					`http://172.171.242.107:80/api/v1/applications/${application.id}`,
 					{
 						method: "PUT",
 						headers: {
@@ -173,9 +173,9 @@ function createUpdateBtn(parentElement, formContainer, application) {
 				submitButton.innerText = "Update";
 				submitButton.disabled = false;
 				displayToast("Application updated successfully");
-				// setTimeout(() => {
-				// 	window.open("../templates/popup.html", "_self");
-				// }, 1000);
+				setTimeout(() => {
+					window.open("../templates/popup.html", "_self");
+				}, 1000);
 			})
 			.catch((error) => {
 				submitButton.classList.remove("loading");
@@ -200,7 +200,7 @@ function createDeleteBtn(parentElement, application) {
 		getToken()
 			.then((token) => {
 				return fetch(
-					`http://172.171.242.107:8080/api/v1/applications/${application.id}`,
+					`http://172.171.242.107:80/api/v1/applications/${application.id}`,
 					{
 						method: "DELETE",
 						headers: {
@@ -215,9 +215,9 @@ function createDeleteBtn(parentElement, application) {
 				deleteBtn.innerText = "Delete";
 				deleteBtn.disabled = false;
 				displayToast("Application deleted successfully");
-				// setTimeout(() => {
-				// 	window.open("../templates/popup.html", "_self");
-				// }, 1000);
+				setTimeout(() => {
+					window.open("../templates/popup.html", "_self");
+				}, 1000);
 			})
 			.catch((error) => {
 				deleteBtn.classList.remove("loading");

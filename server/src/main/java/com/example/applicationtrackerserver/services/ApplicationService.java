@@ -1,5 +1,6 @@
 package com.example.applicationtrackerserver.services;
 
+import com.example.applicationtrackerserver.enums.ApplicationStatus;
 import com.example.applicationtrackerserver.exceptions.ApplicationExceptions.ApplicationNotFoundException;
 import com.example.applicationtrackerserver.exceptions.UserExceptions.UserNotFoundException;
 import com.example.applicationtrackerserver.models.Application;
@@ -41,11 +42,12 @@ public class ApplicationService {
                 .orElseThrow(() -> new ApplicationNotFoundException("Application wtih ID " + id + " not found"));
     }
 
-    public List<Application> getApplicationsByStatus(String status) {
+    public List<Application> getApplicationsByStatus(ApplicationStatus status) {
         return applicationRepository.findByStatus(status);
     }
 
-    public List<Application> getApplicationsByUserIdAndStatus(long userId, String status) throws UserNotFoundException {
+    public List<Application> getApplicationsByUserIdAndStatus(long userId, ApplicationStatus status)
+            throws UserNotFoundException {
         User user = userService.getUserById(userId);
         return applicationRepository.findByUserAndStatus(user, status);
     }
