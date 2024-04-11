@@ -19,11 +19,18 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: "17"
-          distribution: "adopt"
-
+          distribution: "adopt"\
+          
+      - name: Run unit tests
+        working-directory: "./server"
+        env: 
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: mvn test 
+          
       - name: Build with Maven
         working-directory: "./server"
-        run: mvn clean install
+        run: mvn clean install -D maven.test.skip
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
