@@ -1,9 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Job Application Tracker",
+  "name": "JobWise",
   "version": "1.0",
   "description": "This extension will help you track your job applications on LinkedIn.",
   "permissions": ["activeTab", "alarms", "storage", "notifications"],
+  "icons": {
+      "16": "assets/logo.png",
+      "48": "assets/logo.png",
+      "128": "assets/logo.png"
+  },
   "background": {
     "service_worker": "js/background.js"
   },

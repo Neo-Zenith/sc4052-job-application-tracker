@@ -1,15 +1,15 @@
 let isLoggedIn = false;
 
 (async () => {
-	console.log("[Extension] LinkedIn Job Saver is active!");
+	console.log("[Extension] JobWise is active!");
 
 	getToken()
 		.then(() => {
-			displayToast("LinkedIn Job Saver is active!");
+			displayToast("JobWise is active!");
 			isLoggedIn = true;
 		})
 		.catch(() => {
-			displayToast("Please login to save jobs!");
+			displayToast("Please login to save jobs!", "red");
 		});
 })();
 
@@ -17,6 +17,7 @@ document.addEventListener("click", async function (event) {
 	console.log("[Extension] Clicked", isApply(event));
 	if (isLoggedIn && isApply(event)) {
 		console.log("[Extension] Clicked on apply button!");
+		displayToast("Saving job application...");
 		const jobDetails = await extractJobDetails();
 		const payload = {
 			...jobDetails,
@@ -39,21 +40,6 @@ document.addEventListener("click", async function (event) {
 			}
 		);
 	}
-	// else if (isSubmitApplication(event)) {
-	// 	payload = { status: "Applied" };
-	// 	console.log("[Extension] Updating job...");
-	// 	chrome.runtime.sendMessage(
-	// 		{ type: "UPDATE_JOB", payload: payload },
-	// 		function (response) {
-	// 			if (response.success) {
-	// 				console.log("[Extension] Job updated successfully");
-	// 				displayToast("Job application updated!");
-	// 			} else {
-	// 				console.log("[Extension] Failed to update job");
-	// 			}
-	// 		}
-	// 	);
-	// }
 });
 
 async function getToken() {
@@ -106,6 +92,7 @@ function displayToast(message, color = "rgba(0, 86, 179, 0.7)") {
 	// Fade out animation after 3 seconds
 	setTimeout(() => {
 		modalDiv.style.opacity = "0";
+		modalDiv.remove();
 	}, 3000);
 }
 

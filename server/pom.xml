@@ -65,11 +65,10 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Testing -->
+		<!-- Spring Security Test -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		

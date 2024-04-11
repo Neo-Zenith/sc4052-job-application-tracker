@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import com.example.applicationtrackerserver.models.Application;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import java.net.URI;
@@ -24,16 +27,12 @@ public class GeminiClient {
 
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=";
 
+    @Value("${GEMINI_API_KEY}")
     private String geminiApiKey;
 
-    public GeminiClient() {
-        try {
-            Dotenv dotenv = Dotenv.load();
-            geminiApiKey = dotenv.get("GEMINI_API_KEY");
-        } catch (Exception e) {
-            logger.info("Failed to load environment variables: " + e.getMessage());
-            geminiApiKey = System.getenv("GEMINI_API_KEY");
-        }
+    @PostConstruct
+    public void init() {
+        logger.info("[GeminiClient] API Key Injected: " + geminiApiKey != null ? "Yes" : "No");
     }
 
     public String reviewResume(String resume, String jobDescription)

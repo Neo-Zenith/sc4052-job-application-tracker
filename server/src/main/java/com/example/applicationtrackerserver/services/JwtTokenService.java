@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +21,10 @@ import java.util.function.Function;
 public class JwtTokenService {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
 
-    private static final String SECRET = "SC4052_CLOUD_COMPUTING";
     private static final long EXPIRATION_TIME = 864_000_000; // 10 days
+
+    @Value("${JWT_SECRET}")
+    private String JWT_SECRET;
 
     public String generateToken(UserInfoDetails userInfoDetails) {
         Date now = new Date();
@@ -35,7 +38,7 @@ public class JwtTokenService {
                 .setSubject(userInfoDetails.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
@@ -62,7 +65,7 @@ public class JwtTokenService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
-                .setSigningKey(SECRET)
+                .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
     }
