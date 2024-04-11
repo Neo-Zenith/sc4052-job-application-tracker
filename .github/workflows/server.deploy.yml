@@ -5,7 +5,7 @@ on:
     branches:
       - master # Change this to your branch name if not 'main'
     paths:
-      - 'server/**'
+      - "server/**"
 
 jobs:
   build:
@@ -19,15 +19,15 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: "17"
-          distribution: "adopt"\
-          
+          distribution: "adopt"
+
       - name: Run unit tests
         working-directory: "./server"
-        env: 
+        env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: mvn test 
-          
+        run: mvn test
+
       - name: Build with Maven
         working-directory: "./server"
         run: mvn clean install -D maven.test.skip
@@ -47,4 +47,4 @@ jobs:
           context: "./server"
           dockerfile: Dockerfile
           push: true
-          tags: neozenith1501/jobwise:server-latest 
+          tags: neozenith1501/jobwise:server-latest
