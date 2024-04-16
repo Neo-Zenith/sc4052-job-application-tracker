@@ -35,7 +35,7 @@ class AuthPageController {
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            if (response.status !== 200) {
+            if (response.status !== 201) {
                 toast.error(data.message);
             } else {
                 toast.success("Signup successful!");
