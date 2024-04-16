@@ -42,11 +42,11 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/api-docs/**", "/swagger-ui/**", "/favicon.ico",
                                 "/api/v1/auth/**")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                        .permitAll())
+                .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
