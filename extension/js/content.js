@@ -89,11 +89,11 @@ function displayToast(message, color = "rgba(0, 86, 179, 0.7)") {
 		modalDiv.style.opacity = "1";
 	}, 100);
 
-	// Fade out animation after 3 seconds
+	// Fade out animation after 1 seconds
 	setTimeout(() => {
 		modalDiv.style.opacity = "0";
 		modalDiv.remove();
-	}, 3000);
+	}, 1000);
 }
 
 function isApply(event) {
