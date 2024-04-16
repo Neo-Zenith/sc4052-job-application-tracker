@@ -78,7 +78,7 @@ export default function UpdateApplicationStatusPage() {
                             <select
                                 style={{
                                     cursor: "pointer",
-                                    backgroundColor: "transparent",
+                                    backgroundColor: "#282828",
                                     color: "white",
                                     font: "400 1.2rem Inter",
                                     border: "1px solid #ba9ffb",
@@ -100,7 +100,13 @@ export default function UpdateApplicationStatusPage() {
                                 </option>
                                 {applications.map((app) => {
                                     return (
-                                        <option key={app.id} value={app.id}>
+                                        <option
+                                            key={app.id}
+                                            value={app.id}
+                                            style={{
+                                                backgroundColor: "transparent",
+                                            }}
+                                        >
                                             ID {app.id}: {app.jobTitle} (
                                             {app.companyName})
                                         </option>
