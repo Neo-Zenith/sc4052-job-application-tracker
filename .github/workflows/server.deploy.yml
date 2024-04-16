@@ -1,6 +1,7 @@
 name: Deploy Server to Docker Hub Pipeline
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master # Change this to your branch name if not 'main'
