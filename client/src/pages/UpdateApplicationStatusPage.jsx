@@ -138,7 +138,6 @@ export default function UpdateApplicationStatusPage() {
                             <select
                                 style={{
                                     cursor: "pointer",
-                                    backgroundColor: "transparent",
                                     color: "white",
                                     font: "400 1.2rem Inter",
                                     border: "1px solid #ba9ffb",

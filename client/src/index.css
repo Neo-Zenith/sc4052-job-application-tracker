@@ -3,3 +3,7 @@ html, body {
   margin: 0;
   background-color: var(--color-surface-100);
 }
+
+select {
+    background-color: #282828 !important
+}
